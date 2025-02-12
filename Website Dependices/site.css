@@ -108,7 +108,7 @@ header {
 }
 
 .bg1 {
-	background-color: #ffe400;
+	background-color: #00c8ff;
 }
 
 .bg2 {
@@ -136,5 +136,5 @@ footer {
 }
 
 #incomplete {
-	background-color: red;
+	background-color: rgb(0, 89, 255);
 }
