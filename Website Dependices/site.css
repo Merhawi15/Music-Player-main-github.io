@@ -122,9 +122,6 @@ header {
 	margin-top: 0;
 	margin-bottom: 0;
 	padding: 20px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between; /* Ensures space between left and right */
   }
   
   .header-left {
@@ -197,7 +194,7 @@ footer {
 }
 
 #incomplete {
-	background: linear-gradient(to left, #639bf4, #3d9df8, #0077ff);
+	background: linear-gradient(to right, #639bf4, #3d9df8, #0077ff);
 }
 
 /* Audio Container Styling */
