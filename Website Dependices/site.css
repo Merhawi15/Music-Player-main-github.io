@@ -183,3 +183,33 @@ footer {
 #incomplete {
 	background: linear-gradient(to left, #639bf4, #3d9df8, #0077ff);
 }
+
+/* Audio Container Styling */
+.audio-container {
+    background: linear-gradient(to right, rgb(0, 183, 244), rgb(27, 151, 253), rgb(0, 119, 255));
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%; /* Adjust width */
+    max-width: 600px;
+    text-align: center;
+	border: 2px inset black;
+}
+
+/* Audio Player Styling */
+audio {
+    width: 100%; /* Make it full width */
+    border-radius: 5px; /* Rounded corners */
+    outline: none;
+    margin-top: 10px;
+}
+
+.audio-container h2 {
+    font-size: 1.8rem;
+    color: white;
+}
+
+iframe {
+    border-radius: 1em;
+	border: 5px outset black;
+}
