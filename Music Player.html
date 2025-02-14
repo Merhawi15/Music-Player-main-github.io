@@ -43,6 +43,25 @@
             margin-top: 10px;
             color: #ffffff;
         }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: white;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        .back-button:hover {
+            background-color: #cc3700;
+        }
     </style>
 </head>
 <body>
@@ -59,12 +78,12 @@
         
         <!-- Controls: Play/Pause, Stop, Skip Back, Skip Forward -->
         <div class="controls">
-            <img id="playPauseBtn" src="Images/play.png" alt="Play/Pause" onclick="togglePlayPause()">
+            <img id="playPauseBtn" src="Images/play.png" src="Play/Pause" onclick="togglePlayPause()">
             <img src="Images/reset.png" alt="Reset" onclick="stopMusic()">
             <img src="Images/skip-back.png" alt="Skip Back 5s" onclick="skipBack()">
             <img src="Images/skip-foward.png" alt="Skip Forward 5s" onclick="skipForward()">
-        </div>
-    </div>
+            <a href="index.html" class="back-button">⬅ Back to Main Page</a>
+    
     
     <script>
         let audio = document.getElementById("audio");
