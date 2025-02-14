@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jey Uso Quiz</title>
+    <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/boom.png">
+    <!--  https://icons8.com/icon/set/kitchen/family-animated--animated, 20250116 -->
+    <!-- Favicon is a Pathway and Image File, not from a server. Goes into computer. -->
+    <style>
+        body {
+            background: linear-gradient(to right, rgb(0, 183, 244), rgb(27, 151, 253), rgb(0, 119, 255)); /* Gradient background */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .start-button {
+            background-color: #28a745;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .start-button:hover {
+            background-color: #218838;
+        }
+        .quiz-container {
+            display: none; /* Hide the quiz until start */
+            margin-top: 20px;
+        }
+        .question {
+            font-size: 1.5rem;
+        }
+        .answers button {
+            background-color: #ff4500;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        .answers button:hover {
+            background-color: #cc3700;
+        }
+        .back-button {
+            background-color: #007bff;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>How Well Do You Know Jey Uso?</h1>
+    <p>Click the button below to start the quiz!</p>
+
+    <button class="start-button" onclick="startQuiz()">Start Quiz</button>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="question" id="question"></div>
+        
+        <div class="answers">
+            <button onclick="checkAnswer(1)" id="answer1"></button>
+            <button onclick="checkAnswer(2)" id="answer2"></button>
+            <button onclick="checkAnswer(3)" id="answer3"></button>
+            <button onclick="checkAnswer(4)" id="answer4"></button>
+        </div>
+
+        <div id="result"></div>
+
+        <!-- Back to Main Page Button -->
+        <a href="index.html">
+            <button class="back-button">⬅ Back to Main Page</button>
+        </a>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What is Jey Uso's real name?", answers: ["Jonathan Fatu", "Joseph Fatu", "Jimmy Uso", "Roman Reigns"], correct: 2 },
+            { question: "What tag team is Jey Uso a part of?", answers: ["The Usos", "The New Day", "The Shield", "The Bloodline"], correct: 1 },
+            { question: "Who is Jey Uso's cousin in WWE?", answers: ["Roman Reigns", "The Rock", "Seth Rollins", "John Cena"], correct: 1 },
+            { question: "When did Jey Uso win his first SmackDown Tag Team Championship?", answers: ["2014", "2015", "2017", "2020"], correct: 2 },
+            { question: "What signature move is Jey Uso known for?", answers: ["Samoan Drop", "Superkick", "Spear", "Uso Splash"], correct: 4 },
+            { question: "Which of these teams has Jey Uso NOT faced at WrestleMania?", answers: ["The New Day", "The Shield", "The Miz & John Morrison", "The Usos vs The Rock"], correct: 4 },
+            { question: "What year did Jey Uso make his WWE debut?", answers: ["2009", "2010", "2011", "2012"], correct: 1 },
+            { question: "Who was Jey Uso's first WWE Tag Team Championship partner?", answers: ["Jimmy Uso", "Roman Reigns", "The Rock", "Sami Zayn"], correct: 1 },
+            { question: "What was the first major pay-per-view event where The Usos competed together?", answers: ["Royal Rumble", "Survivor Series", "WrestleMania", "Elimination Chamber"], correct: 3 },
+            { question: "Which WrestleMania did Jey Uso and Jimmy Uso successfully defend their tag titles?", answers: ["WrestleMania 33", "WrestleMania 35", "WrestleMania 37", "WrestleMania 32"], correct: 2 },
+            { question: "Jey Uso is part of which famous wrestling family?", answers: ["The Fatu Family", "The Anoa'i Family", "The Guerrero Family", "The Hart Family"], correct: 2 },
+            { question: "What is the name of Jey Uso’s twin brother?", answers: ["Jimmy Uso", "Joe Uso", "Jay Uso", "Jonny Uso"], correct: 1 },
+            { question: "Which move did Jey Uso use to pin Roman Reigns in their match?", answers: ["Samoan Drop", "Superkick", "Spear", "Uso Splash"], correct: 2 },
+            { question: "What title did Jey Uso win for the first time in 2020?", answers: ["Universal Championship", "SmackDown Tag Team Championship", "Intercontinental Championship", "WWE Championship"], correct: 1 },
+            { question: "Which of these WWE legends did Jey Uso recently face in a cage match?", answers: ["The Rock", "Edge", "Randy Orton", "Daniel Bryan"], correct: 4 },
+            { question: "What year did The Usos officially form as a tag team?", answers: ["2010", "2011", "2012", "2013"], correct: 2 },
+            { question: "Jey Uso has been in a feud with which WWE superstar for the Universal Championship?", answers: ["Daniel Bryan", "Seth Rollins", "Roman Reigns", "Cody Rhodes"], correct: 3 },
+            { question: "What was Jey Uso’s first pay-per-view match?", answers: ["WrestleMania", "SummerSlam", "Royal Rumble", "Survivor Series"], correct: 2 },
+            { question: "What team did Jey Uso face in their first match for the SmackDown Tag Team Championships?", answers: ["The New Day", "The Ascension", "The Revival", "The Dudley Boyz"], correct: 1 },
+            { question: "Which finisher is commonly associated with The Usos?", answers: ["Samoan Drop", "Superkick", "Tag Team Suplex", "Uso Splash"], correct: 4 },
+            { question: "Who did Jey Uso face at the 2020 Clash of Champions?", answers: ["Daniel Bryan", "Roman Reigns", "Edge", "Braun Strowman"], correct: 2 },
+            { question: "Jey Uso was a part of which faction before The Bloodline?", answers: ["The Usos", "The Shield", "The New Day", "Team Samoan"], correct: 1 },
+            { question: "What year did Jey Uso become part of the SmackDown roster?", answers: ["2016", "2017", "2015", "2014"], correct: 3 },
+            { question: "What is the name of the move Jey Uso uses off the top rope?", answers: ["Uso Splash", "Samoan Drop", "Superkick", "Superplex"], correct: 1 },
+            { question: "Jey Uso helped Roman Reigns during which pay-per-view event?", answers: ["Hell in a Cell", "Survivor Series", "Royal Rumble", "WrestleMania"], correct: 1 },
+            { question: "In what city did The Usos make their WWE debut?", answers: ["New York", "Chicago", "Los Angeles", "Miami"], correct: 4 }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById("question").textContent = question.question;
+            document.getElementById("answer1").textContent = question.answers[0];
+            document.getElementById("answer2").textContent = question.answers[1];
+            document.getElementById("answer3").textContent = question.answers[2];
+            document.getElementById("answer4").textContent = question.answers[3];
+        }
+
+        function checkAnswer(answerIndex) {
+            const question = questions[currentQuestion];
+            if (answerIndex === question.correct) {
+                score++;
+            }
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("result").textContent = `Your score: ${score} out of ${questions.length}`;
+            }
+        }
+
+        function startQuiz() {
+            document.querySelector("button.start-button").style.display = "none"; // Hide the "Start Quiz" button
+            document.getElementById("quiz-container").style.display = "block"; // Show the quiz container
+            loadQuestion(); // Load the first question
+        }
+    </script>
+
+</body>
+</html>
