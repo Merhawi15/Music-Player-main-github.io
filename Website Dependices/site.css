@@ -135,22 +135,6 @@ header {
 	margin-left: 15px; /* Keeps spacing between text and logo */
   }
   
-  #quiz-button {
-	padding: 10px 15px;
-	font-size: 16px;
-	background-color: #007bff;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-family: 'Bebas Neue', serif;
-	margin-bottom: 10px; /* Adds space between the buttons */
-  }
-  
-  #quiz-button:hover {
-	background-color: #0056b3;
-  }
-  
   #header-button {
 	padding: 10px 15px;
 	font-size: 16px;
@@ -165,6 +149,22 @@ header {
   #header-button:hover {
 	background-color: #0056b3;
   }
+
+  #music-button {
+	padding: 10px 15px;
+	font-size: 16px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-family: 'Bebas Neue', serif;
+  }
+  
+  #music-button:hover {
+	background-color: #0056b3;
+  }
+
 .bg1 {
 	background: linear-gradient(to right, #72cdec, #00a2ff, hsl(213, 100%, 50%));
 

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 50px;
+        }
+        .player {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .controls img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .album-cover {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background-color: #444;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .artist-name {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="player">
+        <h2>Jey Uso - Main Event ISH</h2>
+        <!-- Album cover space -->
+        <img src="Images/Album Cover.png" alt="Album Cover" class="album-cover">
+        <!-- Song artist -->
+        <p class="artist-name">Main Event Jey Uso</p>
+        <audio id="audio" controls>
+            <source src="Music/USO.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        
+        <!-- Controls: Play/Pause, Stop, Skip Back, Skip Forward -->
+        <div class="controls">
+            <img id="playPauseBtn" src="Images/play.png" alt="Play/Pause" onclick="togglePlayPause()">
+            <img src="Images/reset.png" alt="Reset" onclick="stopMusic()">
+            <img src="Images/skip-back.png" alt="Skip Back 5s" onclick="skipBack()">
+            <img src="Images/skip-foward.png" alt="Skip Forward 5s" onclick="skipForward()">
+        </div>
+    </div>
+    
+    <script>
+        let audio = document.getElementById("audio");
+        let playPauseBtn = document.getElementById("playPauseBtn");
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.src = "pause.png";  // Change to pause image
+            } else {
+                audio.pause();
+                playPauseBtn.src = "play.png";  // Change to play image
+            }
+        }
+
+        function stopMusic() {
+            audio.pause();
+            audio.currentTime = 0;
+            playPauseBtn.src = "play.png";  // Reset to play image after stopping
+        }
+
+        function skipBack() {
+            audio.currentTime -= 5;  // Skip backward by 5 seconds
+        }
+
+        function skipForward() {
+            audio.currentTime += 5;  // Skip forward by 5 seconds
+        }
+    </script>
+</body>
+</html>
