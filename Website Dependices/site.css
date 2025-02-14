@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Nanum+Brush+Script|Roboto|Roboto+Slab');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lilita+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Marker+Hatch&family=Shafarik&display=swap');
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 840px){
 
@@ -9,15 +9,13 @@
 
 	}
 	section {
-		background-color: white;
-		width: 100%;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 0;
-		margin-bottom: 0;
-		padding-top: 20px;
-		padding-bottom: 20px;
-	}
+    display: flex;
+    flex-direction: row; /* Arrange items in a horizontal line */
+    align-items: center; /* Align items vertically */
+    justify-content: space-around; /* Space out elements evenly */
+    flex-wrap: wrap; /* Allow wrapping for small screens */
+    padding: 20px;
+}
 		
 }
 
@@ -49,7 +47,7 @@
 
 body {
 	max-width: 100%;
-	font-family: 'Roboto Slab', serif;
+	font-family: 'Bebas Neue', serif;
 	margin: 0;
 	padding: 0;
 	background-color: white;
@@ -74,8 +72,9 @@ h2,h3,h4 {
 
 p {
 	font-size: 1.4em;
-	background: linear-gradient(to right, #d73027, #f47c48, #dca601);
-	padding: 10px 40px 10px 40px;
+	color: black;
+	padding: 10px 30px 10px 40px;
+	border: 5px groove #000; /* Black solid border */
 }
 
 ul {
@@ -92,7 +91,7 @@ img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	height: auto;
+	height: 35%;
 	max-height: 400px;
 	max-width: 100%;
 }
@@ -108,9 +107,9 @@ header {
 }
 
 .bg1 {
-	background: linear-gradient(to right, #000000, #200122, #6f0000, #d73027, #f47c48);
-}
+	background: linear-gradient(to right, #FFD700, #FFB800, #E6A400);
 
+}	
 .bg2 {
 	background-color: #001bff;
 }
@@ -136,5 +135,5 @@ footer {
 }
 
 #incomplete {
-	background: linear-gradient(to right, #200122, #6f0000, #d73027, #f47c48);
+	background: linear-gradient(to right, #FFD700, #c58d01, #9b6f00);
 }
