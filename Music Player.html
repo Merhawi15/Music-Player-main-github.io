@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
+    <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/BRUH.png">
     <style>
 
         /*Fonts*/
         body {
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
             text-align: center;
-            background: linear-gradient(to right, rgb(106, 202, 249), rgb(61, 126, 245), rgb(0, 84, 163));
+            background-image: url(Images/BG\ YEET.png);
             color: white;
             padding: 50px;
         }
         .player {
-            background: linear-gradient(to left, rgb(106, 202, 249), rgb(61, 126, 245), rgb(0, 84, 163));
+            background-image: url(Images/Player\ YEET.png);
             padding: 20px;
             border-radius: 10px;
             border: 5px outset blue;
@@ -48,45 +49,121 @@
             color: #ffffff;
         }
 
-        /* Back Button */
         .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: white;
-            background-color: #ff4500;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        }
+    position: fixed;
+    bottom: 20px;  /* Distance from bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #ff4500;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
 
-        .back-button:hover {
-            background-color: #cc3700;
-        }
+.back-button:hover {
+    background-color: #cc3700;
+}
+
+.progress-container {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px 0;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: white;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.1s linear;
+}
+
+.time-display {
+    font-size: 18px;
+    margin-top: 10px;
+    color: white;
+}
+
+
+#audioProgress {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.heart {
+    position: absolute;
+    right: -20px; /* Adjust to place the heart at the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #ccc; /* Default color (gray) */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.heart.liked {
+    color: red; /* Red when liked */
+}
+
+
+
+
     </style>
 </head>
 <body>
     <div class="player">
         <h2>Jey Uso - Main Event ISH</h2>
-        <!-- Album cover space -->
         <img src="Images/Album Cover.png" alt="Album Cover" class="album-cover">
-        <!-- Song artist -->
         <p class="artist-name">Main Event Jey Uso</p>
-        <audio id="audio" controls>
+    
+        <!-- Custom Progress Bar -->
+        <div class="progress-container" onclick="setProgress(event)">
+            <div class="progress-bar">
+            </div>
+        </div>
+        <div class="time-display">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">2:53</span>
+</div>
+   
+        
+        
+    
+        <!-- Audio Element (Hidden Default Controls) -->
+        <audio id="audio">
             <source src="Music/USO.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        
+    
         <!-- Controls: Play/Pause, Stop, Skip Back, Skip Forward -->
         <div class="controls">
-            <img id="playPauseBtn" src="Images/play.png" src="Play/Pause" onclick="togglePlayPause()">
+            <img id="playPauseBtn" src="Images/play.png" alt="Play/Pause" onclick="togglePlayPause()">
             <img src="Images/reset.png" alt="Reset" onclick="stopMusic()">
             <img src="Images/skip-back.png" alt="Skip Back 5s" onclick="skipBack()">
             <img src="Images/skip-foward.png" alt="Skip Forward 5s" onclick="skipForward()">
-            <a href="index.html" class="back-button">⬅ Back to Main Page</a>
+        </div>
+    
+        <!-- Back Button -->
+        <a href="index.html" class="back-button">⬅ Back to Main Page</a>
+    </div>
+    
+        
+            
     
     
     <script>
@@ -94,14 +171,15 @@
         let playPauseBtn = document.getElementById("playPauseBtn");
 
         function togglePlayPause() {
-            if (audio.paused) {
-                audio.play();
-                playPauseBtn.src = "pause.png";  // Change to pause image
-            } else {
-                audio.pause();
-                playPauseBtn.src = "play.png";  // Change to play image
-            }
-        }
+    if (audio.paused) {
+        audio.play();
+        playPauseBtn.src = "Images/pause.png";  // Change to pause image when playing
+    } else {
+        audio.pause();
+        playPauseBtn.src = "Images/play.png";  // Change back to play image when paused
+    }
+}
+
 
         function stopMusic() {
             audio.pause();
@@ -116,6 +194,57 @@
         function skipForward() {
             audio.currentTime += 5;  // Skip forward by 5 seconds
         }
+
+        const progressContainer = document.querySelector(".progress-container");
+const progressBar = document.querySelector(".progress-bar");
+const progressCircle = document.querySelector(".progress-circle");
+
+// Update progress bar as the song plays
+audio.addEventListener("timeupdate", updateProgress);
+progressContainer.addEventListener("click", setProgress);
+
+function updateProgress() {
+    const progressPercent = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    progressCircle.style.left = `${progressPercent}%`;
+}
+
+// Set new position when clicking on progress bar
+function setProgress(event) {
+    const width = progressContainer.clientWidth;
+    const clickX = event.offsetX;
+    const duration = audio.duration;
+    audio.currentTime = (clickX / width) * duration;
+}
+
+const currentTimeDisplay = document.getElementById("currentTime");
+const totalTimeDisplay = document.getElementById("totalTime");
+
+// Update total time when the audio is loaded (duration)
+audio.addEventListener("loadedmetadata", function () {
+    totalTimeDisplay.textContent = formatTime(audio.duration); // Set the total time (e.g., 2:53)
+});
+
+// Update current time as the song plays
+audio.addEventListener("timeupdate", function () {
+    currentTimeDisplay.textContent = formatTime(audio.currentTime); // Update current time (e.g., 1:20)
+});
+
+// Function to format time (mm:ss format)
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60); // Get minutes
+    const remainingSeconds = Math.floor(seconds % 60); // Get remaining seconds
+    return `${minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`; // Format as mm:ss
+}
+
+const heart = document.getElementById("heart");
+
+// Toggle the 'liked' class when the heart is clicked
+heart.addEventListener("click", function () {
+    heart.classList.toggle("liked"); // Toggle the class that changes the color to red
+});
+
+
     </script>
 </body>
 </html>
