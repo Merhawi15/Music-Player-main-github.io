@@ -127,6 +127,7 @@ header {
   .header-left {
 	display: flex;
 	align-items: center; /* Keeps the logo and text aligned */
+	transform: scale(1.1); /* Make the button appear bigger when hovered */
   }
   
   .header-left img {

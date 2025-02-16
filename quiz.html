@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Quiz</title>
+    <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/YEET2.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lilita+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Marker+Hatch&family=Shafarik&display=swap');
+        body {
+            font-family: 'Bebas Neue', serif;
+            background-image: url(Images/samoan.png);
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.1); /* Make the button appear bigger when hovered */
+        }
+        .start-button {
+            background-color: #28a745;
+            font-family: 'Bebas Neue', serif;
+        }
+        .start-button:hover {
+            background-color: #004b12;
+        }
+        .restart-button {
+            background-color: #dc3545;
+            font-family: 'Bebas Neue', serif;
+        }
+        .restart-button:hover {
+            background-color: #6b000b;
+        }
+
+        .back-button {
+    position: fixed;
+    bottom: 20px;  /* Distance from bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #ff4500;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.back-button:hover {
+    background-color: #cc3700;
+}
+
+.check-answers-button {
+    background-color: rgb(255, 255, 144);  /* Yellow background */
+    color: black;  /* Black text */
+    border: none;
+    font-family: 'Bebas Neue', serif;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.check-answers-button:hover {
+    background-color: #ffcc00;  /* Darker yellow on hover */
+}
+
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz-container">
+        <h2 id="question">Welcome to the HTML quiz!</h2>
+        <div id="options">
+            <button class="start-button" onclick="startQuiz()">Start Quiz</button>
+        </div>
+        <h3 id="score"></h3>
+        <!-- Back Button -->
+        <a href="index.html" class="back-button">⬅ Back to Main Page</a>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyperlink Text Management Language", "Home Tool Markup Language"], answer: "Hyper Text Markup Language" },
+            { question: "Which HTML tag is used to define an internal style sheet?", options: ["<style>", "<script>", "<css>", "<link>"], answer: "<style>" },
+            { question: "Which attribute is used to specify an alternate text for an image?", options: ["alt", "src", "title", "href"], answer: "alt" },
+            { question: "What does CSS stand for?", options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"], answer: "Cascading Style Sheets" },
+            { question: "Which HTML tag is used to create a hyperlink?", options: ["<a>", "<link>", "<href>", "<nav>"], answer: "<a>" },
+            { question: "What is the default display property of a <div> element?", options: ["block", "inline", "flex", "grid"], answer: "block" },
+            { question: "Which HTML tag is used to insert an image?", options: ["<img>", "<picture>", "<photo>", "<src>"], answer: "<img>" },
+            { question: "Which input type is used for passwords?", options: ["password", "text", "secure", "hidden"], answer: "password" },
+            { question: "Which HTML element is used to define a table row?", options: ["<tr>", "<td>", "<th>", "<table>"], answer: "<tr>" },
+            { question: "What does the <br> tag do?", options: ["Adds a line break", "Makes text bold", "Creates a border", "Starts a new paragraph"], answer: "Adds a line break" },
+            { question: "Which HTML element is used for the largest heading?", options: ["<h1>", "<h6>", "<head>", "<header>"], answer: "<h1>" },
+            { question: "Which CSS property controls text size?", options: ["font-size", "text-style", "text-size", "font-style"], answer: "font-size" },
+            { question: "Which CSS property sets the background color?", options: ["background-color", "color", "bgcolor", "background"], answer: "background-color" },
+            { question: "Which HTML element is used to define a list item?", options: ["<li>", "<ul>", "<ol>", "<list>"], answer: "<li>" },
+            { question: "Which CSS property controls the spacing between letters?", options: ["letter-spacing", "word-spacing", "line-height", "text-align"], answer: "letter-spacing" },
+            { question: "Which HTML tag is used for a definition list?", options: ["<dl>", "<ol>", "<ul>", "<list>"], answer: "<dl>" },
+            { question: "Which HTML attribute specifies the destination of a link?", options: ["href", "src", "alt", "target"], answer: "href" },
+            { question: "What is the default value of the position property in CSS?", options: ["static", "relative", "absolute", "fixed"], answer: "static" },
+            { question: "Which HTML element is used to create an ordered list?", options: ["<ol>", "<ul>", "<li>", "<dl>"], answer: "<ol>" },
+            { question: "Which HTML tag is used to define a table?", options: ["<table>", "<tr>", "<td>", "<th>"], answer: "<table>" }
+
+        ];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        
+        function startQuiz() {
+            document.getElementById("question").textContent = questions[currentQuestionIndex].question;
+            const optionsElement = document.getElementById("options");
+            optionsElement.innerHTML = "";
+            questions[currentQuestionIndex].options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => nextQuestion(option);
+                optionsElement.appendChild(button);
+            });
+        }
+        
+        function nextQuestion(selectedOption) {
+            if (selectedOption === questions[currentQuestionIndex].answer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById("question").textContent = questions[currentQuestionIndex].question;
+                const optionsElement = document.getElementById("options");
+                optionsElement.innerHTML = "";
+                questions[currentQuestionIndex].options.forEach(option => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.onclick = () => nextQuestion(option);
+                    optionsElement.appendChild(button);
+                });
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+    document.getElementById("question").textContent = "Quiz Completed!";
+    document.getElementById("options").innerHTML = "";
+    const percentage = ((score / questions.length) * 100).toFixed(2);
+    document.getElementById("score").textContent = `Your score: ${score} out of ${questions.length} (${percentage}%)`;
+    
+    const checkAnswersButton = document.createElement("button");
+    checkAnswersButton.textContent = "Check Answers";
+    checkAnswersButton.classList.add("check-answers-button");  // Add the customized class
+    checkAnswersButton.onclick = () => window.location.href = "answer-key.html";  // Link to the answer key page
+    document.getElementById("options").appendChild(checkAnswersButton);
+            
+            // Restart Quiz Button
+            const restartButton = document.createElement("button");
+            restartButton.textContent = "Restart Quiz";
+            restartButton.classList.add("restart-button");
+            restartButton.onclick = () => window.location.reload(); // Reload the page to restart the quiz
+            document.getElementById("options").appendChild(restartButton);
+        }
+    </script>
+</body>
+</html>
