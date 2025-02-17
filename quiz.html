@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Quiz</title>
+    <title>HTML & World Quizzes</title>
     <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/YEET2.png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lilita+One&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Marker+Hatch&family=Shafarik&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
         body {
             font-family: 'Bebas Neue', serif;
             background-image: url(Images/samoan.png);
             color: white;
             text-align: center;
             padding: 50px;
+            font-size: 1.5rem;
         }
         .quiz-container {
             background: rgba(255, 255, 255, 0.1);
@@ -32,157 +33,210 @@
             transition: transform 0.3s ease;
         }
         button:hover {
-            transform: scale(1.1); /* Make the button appear bigger when hovered */
+            transform: scale(1.1);
         }
         .start-button {
             background-color: #28a745;
             font-family: 'Bebas Neue', serif;
+            font-size: 1.15rem;
         }
-        .start-button:hover {
-            background-color: #004b12;
+        .startWQ-button {
+            background-color: #ff6f00;
+            font-family: 'Bebas Neue', serif;
+            font-size: 1.15rem;
         }
         .restart-button {
             background-color: #dc3545;
-            font-family: 'Bebas Neue', serif;
         }
-        .restart-button:hover {
-            background-color: #6b000b;
+        .check-answers-button {
+            background-color: yellow;
+            color: black;
         }
-
+        /* Back Button */
         .back-button {
-    position: fixed;
-    bottom: 20px;  /* Distance from bottom */
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: white;
-    background-color: #ff4500;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
+            display: inline-block;
+            margin-top: 500px;
+            margin-left: 425px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: white;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            position: fixed;
+        }
 
-.back-button:hover {
-    background-color: #cc3700;
-}
-
-.check-answers-button {
-    background-color: rgb(255, 255, 144);  /* Yellow background */
-    color: black;  /* Black text */
-    border: none;
-    font-family: 'Bebas Neue', serif;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.check-answers-button:hover {
-    background-color: #ffcc00;  /* Darker yellow on hover */
-}
-
+        .back-button:hover {
+            background-color: #cc3700;
+        }
     </style>
 </head>
 <body>
     <div class="quiz-container" id="quiz-container">
-        <h2 id="question">Welcome to the HTML quiz!</h2>
+        <h2 id="question">Welcome to the Quiz!</h2>
         <div id="options">
-            <button class="start-button" onclick="startQuiz()">Start Quiz</button>
-            <button class="world-quiz-button" onclick="startWorldQuiz()">World Quiz</button>
-      </div>
+            <button class="start-button" onclick="startQuiz('HTML')">Start HTML Quiz</button>
+            <button class="startWQ-button" onclick="startQuiz('World')">Start World Quiz</button>
+            <a href="index.html" class="back-button">⬅ Back to Main Page</a>
         </div>
         <h3 id="score"></h3>
-        <!-- Back Button -->
-        <a href="index.html" class="back-button">⬅ Back to Main Page</a>
     </div>
+</body>
+
 
     <script>
-        const questions = [
-            { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyperlink Text Management Language", "Home Tool Markup Language"], answer: "Hyper Text Markup Language" },
-            { question: "Which HTML tag is used to define an internal style sheet?", options: ["<style>", "<script>", "<css>", "<link>"], answer: "<style>" },
-            { question: "Which attribute is used to specify an alternate text for an image?", options: ["alt", "src", "title", "href"], answer: "alt" },
-            { question: "What does CSS stand for?", options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"], answer: "Cascading Style Sheets" },
-            { question: "Which HTML tag is used to create a hyperlink?", options: ["<a>", "<link>", "<href>", "<nav>"], answer: "<a>" },
-            { question: "What is the default display property of a <div> element?", options: ["block", "inline", "flex", "grid"], answer: "block" },
-            { question: "Which HTML tag is used to insert an image?", options: ["<img>", "<picture>", "<photo>", "<src>"], answer: "<img>" },
-            { question: "Which input type is used for passwords?", options: ["password", "text", "secure", "hidden"], answer: "password" },
-            { question: "Which HTML element is used to define a table row?", options: ["<tr>", "<td>", "<th>", "<table>"], answer: "<tr>" },
-            { question: "What does the <br> tag do?", options: ["Adds a line break", "Makes text bold", "Creates a border", "Starts a new paragraph"], answer: "Adds a line break" },
-            { question: "Which HTML element is used for the largest heading?", options: ["<h1>", "<h6>", "<head>", "<header>"], answer: "<h1>" },
-            { question: "Which CSS property controls text size?", options: ["font-size", "text-style", "text-size", "font-style"], answer: "font-size" },
-            { question: "Which CSS property sets the background color?", options: ["background-color", "color", "bgcolor", "background"], answer: "background-color" },
-            { question: "Which HTML element is used to define a list item?", options: ["<li>", "<ul>", "<ol>", "<list>"], answer: "<li>" },
-            { question: "Which CSS property controls the spacing between letters?", options: ["letter-spacing", "word-spacing", "line-height", "text-align"], answer: "letter-spacing" },
-            { question: "Which HTML tag is used for a definition list?", options: ["<dl>", "<ol>", "<ul>", "<list>"], answer: "<dl>" },
-            { question: "Which HTML attribute specifies the destination of a link?", options: ["href", "src", "alt", "target"], answer: "href" },
-            { question: "What is the default value of the position property in CSS?", options: ["static", "relative", "absolute", "fixed"], answer: "static" },
-            { question: "Which HTML element is used to create an ordered list?", options: ["<ol>", "<ul>", "<li>", "<dl>"], answer: "<ol>" },
-            { question: "Which HTML tag is used to define a table?", options: ["<table>", "<tr>", "<td>", "<th>"], answer: "<table>" }
+         const htmlQuestions = [
+    { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyperlink Text Management Language", "Home Tool Markup Language"], answer: "Hyper Text Markup Language" },
+    { question: "Which HTML tag is used to define an internal style sheet?", options: ["<style>", "<script>", "<css>", "<link>"], answer: "<style>" },
+    { question: "Which attribute is used to specify an alternate text for an image?", options: ["alt", "src", "title", "href"], answer: "alt" },
+    { question: "What does CSS Stand for?", options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", " Colorful Style Sheets"], answer: "Cascading Style Sheets" },
+    { question: "Which HTML tag is used to create a hyperlink?", options: ["<a>", "<link>", "<href>", "<nav>"], answer: "<a>" },
+    {question: "What is the default display property of a <div> element?", options: ["block", "inline", "flex", "grid"], answer: "block" },
+    { question: "Which HTML tag is used to insert an image?", options: ["<img>", "<picture>", "<photo>", "<src>"], answer: "<img>" },
+    { question: "Which input type is used for passwords?", options: ["password", "text", "secure", "hidden"], answer: "password" },
+    { question: "Which HTML element is used to define a table row?", options: ["<tr>", "<td>", "<th>", "<table>"], answer: "<tr>" },
+    { question: "What does the <br> tag do?", options: ["Adds a line break", "Makes text bold", "Creates a border", "Starts a new paragraph"], answer: "Adds a line break" },
+    { question: "Which HTML element is used for the largest heading?", options: ["<h1>", "<h6>", "<head>", "<header>"], answer: "<h1>" },
+    { question: "Which CSS property controls text size?", options: ["font-size", "text-style", "text-size", "font-style"], answer: "font-size" },
+    { question: "Which CSS property sets the background color?", options: ["background-color", "color", "bgcolor", "background"], answer: "background-color" },
+    { question: "Which HTML element is used to define a list item?", options: ["<li>", "<ul>", "<ol>", "<list>"], answer: "<li>" },
+    { question: "Which CSS property controls the spacing between letters?", options: ["letter-spacing", "word-spacing", "line-height", "text-align"], answer: "letter-spacing" },
+    { question: "Which HTML tag is used for a definition list?", options: ["<dl>", "<ol>", "<ul>", "<list>"], answer: "<dl>" },
+    { question: "Which HTML attribute specifies the destination of a link?", options: ["href", "src", "alt", "target"], answer: "href" },
+    { question: "What is the default value of the position property in CSS?", options: ["static", "relative", "absolute", "fixed"], answer: "static" },
+    { question: "Which HTML element is used to create an ordered list?", options: ["<ol>", "<ul>", "<li>", "<dl>"], answer: "<ol>" },
+    { question: "Which HTML tag is used to define a table?", options: ["<table>", "<tr>", "<td>", "<th>"], answer: "<table>" }
+];
 
-        ];
-        
-        let currentQuestionIndex = 0;
-        let score = 0;
-        
-        function startQuiz() {
-            document.getElementById("question").textContent = questions[currentQuestionIndex].question;
-            const optionsElement = document.getElementById("options");
-            optionsElement.innerHTML = "";
-            questions[currentQuestionIndex].options.forEach(option => {
-                const button = document.createElement("button");
-                button.textContent = option;
-                button.onclick = () => nextQuestion(option);
-                optionsElement.appendChild(button);
-            });
-            function startWorldQuiz() {
-        // Implement the logic for the World Quiz here
-        alert("World Quiz is not implemented yet!");
+const worldQuestions = [
+    { question: "What is the largest ocean on Earth?", options: ["Atlantic", "Pacific", "Indian", "Arctic"], answer: "Pacific" },
+    { question: "Which country has the most population?", options: ["USA", "China", "India", "Russia"], answer: "China" },
+    { question: "What is the capital of Japan?", options: ["Beijing", "Seoul", "Tokyo", "Bangkok"], answer: "Tokyo" },
+    { question: "Which continent is the Sahara Desert in?", options: ["Asia", "Africa", "Australia", "Europe"], answer: "Africa" },
+    { question: "How many Countries are there in the world?", options: ["159", "185", "195", "215"], answer: "195" },
+    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
+    { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Korea", "Vietnam"], answer: "Japan" },
+    { question: "What is the longest river in the world?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], answer: "Nile" },
+    { question: "What is the largest desert in the world?", options: ["Sahara", "Gobi", "Karakum", "Kalahari"], answer: "Sahara" },
+    { question: "Which country has the most islands?", options: ["USA", "Sweden", "Canada", "Finland"], answer: "Sweden" },
+    { question: "What is the capital of Italy?", options: ["Rome", "Milan", "Venice", "Florence"], answer: "Rome" },
+    { question: "Which country is famous for its pyramids?", options: ["Egypt", "Mexico", "China", "India"], answer: "Egypt" },
+    { question: "Which city is known as the Big Apple?", options: ["Los Angeles", "New York", "Chicago", "Miami"], answer: "New York" },
+    { question: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa", "Montreal"], answer: "Ottawa" },
+    { question: "Which country is known for the Eiffel Tower?", options: ["Germany", "France", "Italy", "Spain"], answer: "France" },
+    { question: "Which continent is the Great Barrier Reef located in?", options: ["Asia", "Africa", "Australia", "South America"], answer: "Australia" },
+    { question: "What is the largest country in the world by land area?", options: ["USA", "China", "Canada", "Russia"], answer: "Russia" },
+    { question: "What is the smallest country in the world?", options: ["Vatican City", "Monaco", "San Marino", "Liechtenstein"], answer: "Vatican City" },
+    { question: "Which city is the capital of the United Kingdom?", options: ["London", "Edinburgh", "Manchester", "Cardiff"], answer: "London" },
+    { question: "What is the official language of Brazil?", options: ["Spanish", "Portuguese", "English", "French"], answer: "Portuguese" },
+    { question: "Which country is home to the Taj Mahal?", options: ["Pakistan", "India", "Bangladesh", "Nepal"], answer: "India" },
+    { question: "Which ocean is on the east coast of the United States?", options: ["Atlantic", "Pacific", "Indian", "Arctic"], answer: "Atlantic" },
+    { question: "Which country is known for the kangaroo?", options: ["Australia", "New Zealand", "Canada", "South Africa"], answer: "Australia" },
+    { question: "What is the tallest mountain in the world?", options: ["Mount Kilimanjaro", "Mount Everest", "K2", "Mount Fuji"], answer: "Mount Everest" },
+    { question: "Which country is famous for the Statue of Liberty?", options: ["USA", "France", "Germany", "Italy"], answer: "USA" },
+    { question: "Which continent has the most countries?", options: ["Asia", "Africa", "Europe", "South America"], answer: "Africa" },
+    { question: "Which city is known as the Venice of the North?", options: ["Amsterdam", "Stockholm", "Helsinki", "St. Petersburg"], answer: "Amsterdam" },
+    { question: "What is the capital of Germany?", options: ["Berlin", "Munich", "Hamburg", "Frankfurt"], answer: "Berlin" },
+    { question: "Which country is famous for the Eiffel Tower?", options: ["Germany", "France", "Italy", "Spain"], answer: "France" },
+    { question: "Which country is known for Mount Fuji?", options: ["South Korea", "Japan", "China", "Vietnam"], answer: "Japan" },
+    { question: "Which country has the most time zones?", options: ["USA", "Russia", "China", "India"], answer: "Russia" },
+    { question: "What is the capital of Russia?", options: ["Moscow", "St. Petersburg", "Kiev", "Novosibirsk"], answer: "Moscow" },
+    { question: "Which country is home to the Colosseum?", options: ["France", "Italy", "Spain", "Turkey"], answer: "Italy" },
+    { question: "Which continent is known as the 'Dark Continent'?", options: ["Africa", "Asia", "Australia", "Europe"], answer: "Africa" },
+    { question: "Which country has the longest coastline?", options: ["USA", "Canada", "Australia", "Russia"], answer: "Canada" },
+    { question: "Which city is known as the 'City of Love'?", options: ["Paris", "Rome", "Venice", "New York"], answer: "Paris" },
+    { question: "Which continent is the Amazon rainforest located?", options: ["Asia", "Africa", "South America", "North America"], answer: "South America" },
+    { question: "What is the capital of Spain?", options: ["Barcelona", "Madrid", "Seville", "Valencia"], answer: "Madrid" },
+    { question: "Which country is home to the Great Wall?", options: ["China", "Japan", "India", "South Korea"], answer: "China" },
+    { question: "Which country is the largest producer of coffee?", options: ["Vietnam", "Brazil", "Colombia", "Ethiopia"], answer: "Brazil" },
+    { question: "What is the largest city in the world by population?", options: ["New York", "Tokyo", "Beijing", "London"], answer: "Tokyo" },
+    { question: "Which country is known for the Angel Falls?", options: ["Venezuela", "Brazil", "Argentina", "Chile"], answer: "Venezuela" }
+];
+
+
+
+let currentQuestionIndex = 0;
+let score = 0;
+let currentQuiz = ""; // To track which quiz is being played
+
+function startQuiz(quizType) {
+    currentQuiz = quizType;
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    document.getElementById("score").textContent = "";
+    
+    if (quizType === "HTML") {
+        loadQuestion(htmlQuestions);
+    } else if (quizType === "World") {
+        loadQuestion(worldQuestions);
     }
-        }
-        
-        function nextQuestion(selectedOption) {
-            if (selectedOption === questions[currentQuestionIndex].answer) {
-                score++;
-            }
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                document.getElementById("question").textContent = questions[currentQuestionIndex].question;
-                const optionsElement = document.getElementById("options");
-                optionsElement.innerHTML = "";
-                questions[currentQuestionIndex].options.forEach(option => {
-                    const button = document.createElement("button");
-                    button.textContent = option;
-                    button.onclick = () => nextQuestion(option);
-                    optionsElement.appendChild(button);
-                });
-            } else {
-                endQuiz();
-            }
-        }
+}
 
-        function endQuiz() {
+function loadQuestion(questionSet) {
+    if (currentQuestionIndex < questionSet.length) {
+        document.getElementById("question").textContent = questionSet[currentQuestionIndex].question;
+        
+        const optionsElement = document.getElementById("options");
+        optionsElement.innerHTML = "";
+        
+        questionSet[currentQuestionIndex].options.forEach(option => {
+            const button = document.createElement("button");
+            button.textContent = option;
+            button.onclick = () => nextQuestion(option, questionSet);
+            optionsElement.appendChild(button);
+        });
+    } else {
+        endQuiz(questionSet.length);
+    }
+}
+
+function nextQuestion(selectedOption, questionSet) {
+    if (selectedOption === questionSet[currentQuestionIndex].answer) {
+        score++;
+    }
+    currentQuestionIndex++;
+    loadQuestion(questionSet);
+}
+
+function endQuiz(totalQuestions) {
     document.getElementById("question").textContent = "Quiz Completed!";
     document.getElementById("options").innerHTML = "";
-    const percentage = ((score / questions.length) * 100).toFixed(2);
-    document.getElementById("score").textContent = `Your score: ${score} out of ${questions.length} (${percentage}%)`;
-    
+
+    const percentage = ((score / totalQuestions) * 100).toFixed(2);
+    document.getElementById("score").textContent = `Your score: ${score} out of ${totalQuestions} (${percentage}%)`;
+
+    // Create a container for buttons
+    const buttonContainer = document.createElement("div");
+
+    // Check Answers Button
     const checkAnswersButton = document.createElement("button");
     checkAnswersButton.textContent = "Check Answers";
-    checkAnswersButton.classList.add("check-answers-button");  // Add the customized class
-    checkAnswersButton.onclick = () => window.location.href = "answer-key.html";  // Link to the answer key page
-    document.getElementById("options").appendChild(checkAnswersButton);
-            
-            // Restart Quiz Button
-            const restartButton = document.createElement("button");
-            restartButton.textContent = "Restart Quiz";
-            restartButton.classList.add("restart-button");
-            restartButton.onclick = () => window.location.reload(); // Reload the page to restart the quiz
-            document.getElementById("options").appendChild(restartButton);
-        }
+    checkAnswersButton.classList.add("check-answers-button");
+    
+    if (currentQuiz === "HTML") {
+        checkAnswersButton.onclick = () => window.location.href = "answer-key.html";
+    } else if (currentQuiz === "World") {
+        checkAnswersButton.onclick = () => window.location.href = "answer-key2.html";
+    }
+
+    // Restart Quiz Button
+    const restartButton = document.createElement("button");
+    restartButton.textContent = "Restart Quiz";
+    restartButton.classList.add("restart-button");
+    restartButton.onclick = () => window.location.reload();
+
+    // Append buttons to the button container
+    buttonContainer.appendChild(checkAnswersButton);
+    buttonContainer.appendChild(restartButton);
+
+    // Append the container to the quiz-container
+    document.getElementById("quiz-container").appendChild(buttonContainer);
+}
+
     </script>
 </body>
 </html>
