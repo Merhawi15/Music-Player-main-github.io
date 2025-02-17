@@ -92,6 +92,8 @@
         <h2 id="question">Welcome to the HTML quiz!</h2>
         <div id="options">
             <button class="start-button" onclick="startQuiz()">Start Quiz</button>
+            <button class="world-quiz-button" onclick="startWorldQuiz()">World Quiz</button>
+      </div>
         </div>
         <h3 id="score"></h3>
         <!-- Back Button -->
@@ -136,6 +138,10 @@
                 button.onclick = () => nextQuestion(option);
                 optionsElement.appendChild(button);
             });
+            function startWorldQuiz() {
+        // Implement the logic for the World Quiz here
+        alert("World Quiz is not implemented yet!");
+    }
         }
         
         function nextQuestion(selectedOption) {

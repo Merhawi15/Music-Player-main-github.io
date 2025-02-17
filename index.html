@@ -5,26 +5,26 @@
 <head>
    <meta charset=utf-8>
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!-- -->
+   <!--The two meta tags are used to define the character encoding and the viewport settings for your HTML document.-->
 
    <noscript>Parents, please enable Javascript in your browser in order to your student demo to work properly</noscript>
-   <!-- -->
+   <!--The <noscript> tag is used to provide alternative content for users who have disabled JavaScript in their browsers or whose browsers do not support JavaScript. The content inside the <noscript> tag will only be displayed if JavaScript is not enabled.-->
 
    <link href='Website Dependices/site.css' rel=stylesheet>
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
      <!-- Note: what does INTEGRITY mean? -->
-     <!--- -->
+     <!---the integrity attribute is used in the <link> tag to ensure the integrity of the external resource being loaded.-->
 
    <title>Main Page</title>
-   <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/YEET2.png">
+   <link rel="icon" type="image/x-icon" href="Website Dependices/favicon/alienmonster.png">
    <!--  https://icons8.com/icon/set/kitchen/family-animated--animated, 20250116 -->
    <!-- Favicon is a Pathway and Image File, not from a server. Goes into computer. -->
 
 </head>
-<!-- -->
+<!--The <head> element in an HTML document contains meta-information about the document.-->
 
-<!-- -->
+<!--The <body> tag in an HTML document represents the main content of the document that is visible to the users. It is placed after the <head> tag and contains all the content that you want to display on the webpage, such as text, images, videos, links, forms, and other HTML elements.-->
 <body>
   
   <header id="incomplete">
@@ -63,9 +63,9 @@
    <section>
     <div>
       <img src="https://queenelizabeth.epsb.ca/media/styleassets-schools/queenelizabeth/QueenE_T4_logo_white.png" alt="Case Study">
-      <!-- Date Accessed: ??? -->
+      <!-- Date Accessed:  February 16, 2025 -->
       <img src="Images/MP.png" alt="Repeat for more images">
-      <!-- Date Accessed: ??? -->
+      <!-- Date Accessed: February 16, 2025 -->
     </div>
     <div> 
       <p1>1.<b>QE High School: </b> 
@@ -86,10 +86,10 @@
     <div>
       <!-- YouTube API, see SHARE -->
       <iframe width="560" height="315" src="https://www.youtube.com/embed/0vqy1VOvJ8Y?si=RJR3L9CAHsbn905q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      <!-- Date Accessed: ??? -->
+      <!-- Date Accessed: Febuary 16, 2025-->
   </section>
 
-  <!--  -->
+  <!--The <footer> tag in HTML is used to define a footer for a document or a section.-->
    <footer id="incomplete">
 
   </footer>
@@ -98,7 +98,11 @@
   <script src='Website Dependices/script.js'></script>
 
 </body>
-<!--  -->
+<!--Improved Page Load Time: By placing the JavaScript at the end, the browser can load and render the HTML content first, which improves the perceived load time for the user.
+
+Avoid Blocking: If JavaScript is placed in the <head> section, it can block the rendering of the page until the script is fully downloaded and executed. This can make the page appear to load slowly.
+
+DOM Availability: Placing JavaScript at the end ensures that the DOM (Document Object Model) is fully constructed before the script runs. This is crucial for scripts that manipulate or interact with the DOM elements.-->
 
 <!-- End of HTML Page -->
 </html>
