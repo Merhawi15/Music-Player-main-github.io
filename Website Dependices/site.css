@@ -110,9 +110,10 @@ img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	height: 38%;
+	height: 50%;
 	max-height: 400px;
 	max-width: 100%;
+	margin-bottom: 20px;
 }
 
 header {
@@ -142,7 +143,7 @@ header {
   }
   
   #header-button img{
-	width: 90px; /* Set the desired width */
+	width: 165px; /* Set the desired width */
     height: auto;
     display: block; /* Remove any extra space below the image */
   }
@@ -155,11 +156,10 @@ header {
 }
 
 #music-button img {
-    width: 90px; /* Set the desired width */
+    width: 100px; /* Set the desired width */
     height: auto;
     display: block; /* Remove any extra space below the image */
 }
-
 .bg1 {
 	background: linear-gradient(to right, #72cdec, #00a2ff, hsl(213, 100%, 50%));
 
