@@ -1,51 +1,68 @@
-// Dynamic not static
-//
-//Library-Minim
-//
-//Global Variables
-//
-float X, Y, Width, Height;
-float y ;
-float topDisplayx, TopdisplayY, topDisplayWidth, topDisplayHeight;
-float muteX, muteY, muteWidth, muteHeight;
 void setup() {
-  X = 0;
-  Y = 1;
-  print(X + Y);
-
+  // Set up full-screen mode
   fullScreen();
-  //' println(displayWidth, displayHeight);
-  //println(displayWidth, displayHeight);
+  
   int appWidth = displayWidth;
   int appHeight = displayHeight;
-  X = appWidth *  0.40;
-  Y = appHeight * 0.40;
-  Width = appWidth * 0.40;
-  Height = appHeight  * 0.40;
-  muteX = appWidth * 0.20;
-  muteY = appHeight * 0.20;
-  rect(X, Y, Width, Height);
-  rect (topDisplayx, TopdisplayY, topDisplayWidth, topDisplayHeight);
-  //
-  //
+  float rectWidth = appWidth * 0.40;
+  float rectHeight = appHeight * 0.40;
+  float rectX = appWidth * 0.30;
+  float rectY = appHeight * 0.25;  // Keep the rectangle slightly higher
+  float squareSize = 70;  // Square size
+  float squareY = rectY + rectHeight + 20;  // Place squares below the rectangle
+  float squareSpacing = 10;  // Spacing between squares
+  
+  rect(rectX, rectY, rectWidth, rectHeight);  // Draw the rectangle
+  
+  // Draw 5 small squares in the middle, below the rectangle
+  for (int i = 0; i < 5; i++) {  
+    float squareX = rectX + (i * (squareSize + squareSpacing)) + (rectWidth - (5 * squareSize + 4 * squareSpacing)) / 2;
+    rect(squareX, squareY, squareSize, squareSize);
+  }
+}
 
-  rect(muteX, muteY, muteWidth, muteHeight);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-  rect(X, Y, Width, Height);
-}
 void draw() {
-};
-//
-void mousePressed() {
-};
-//
-void keyPressed () {
+  // No continuous drawing, so leave this empty
 }
-//
-//END MAIN Program
+
+void mousePressed() {
+  // Add any interactivity here if needed (e.g., for buttons)
+}
+
+void keyPressed() {
+  // Add any keyboard interaction here if needed
+}
+void setup() {
+  // Set up full-screen mode
+  fullScreen();
+  
+  int appWidth = displayWidth;
+  int appHeight = displayHeight;
+  float rectWidth = appWidth * 0.40;
+  float rectHeight = appHeight * 0.40;
+  float rectX = appWidth * 0.30;
+  float rectY = appHeight * 0.25;  // Keep the rectangle slightly higher
+  float squareSize = 70;  // Square size
+  float squareY = rectY + rectHeight + 20;  // Place squares below the rectangle
+  float squareSpacing = 10;  // Spacing between squares
+  
+  rect(rectX, rectY, rectWidth, rectHeight);  // Draw the rectangle
+  
+  // Draw 12 small squares in the middle, below the rectangle
+  for (int i = 0; i < 12; i++) {  // Loop for 12 squares
+    float squareX = rectX + (i * (squareSize + squareSpacing)) + (rectWidth - (12 * squareSize + 11 * squareSpacing)) / 2;
+    rect(squareX, squareY, squareSize, squareSize);
+  }
+}
+
+void draw() {
+  // No continuous drawing, so leave this empty
+}
+
+void mousePressed() {
+  // Add any interactivity here if needed (e.g., for buttons)
+}
+
+void keyPressed() {
+  // Add any keyboard interaction here if needed
+}
