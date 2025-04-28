@@ -21,7 +21,7 @@ void setup() {
   rect(albumX, albumY, albumWidth, albumHeight);
 
   // Load Album Cover Image
-  albumCover = loadImage("assets/images/SoccerBall.jpg");
+  albumCover = loadImage("assets/images/ME-JU.jpg");
   imageMode(CENTER);
   image(albumCover, appWidth / 2, albumY + albumHeight / 2, albumWidth * 0.8, albumHeight * 0.8);  // Image positioned inside the album rectangle
 
@@ -63,7 +63,7 @@ void setup() {
 
   // Load the music file
   minim = new Minim(this);
-  player = minim.loadFile("assets/audio/groove.mp3");  // Load the music file from the 'assets/audio' folder
+  player = minim.loadFile("assets/audio/USO.mp3");  // Load the music file from the 'assets/audio' folder
 }
 
 void draw() {
