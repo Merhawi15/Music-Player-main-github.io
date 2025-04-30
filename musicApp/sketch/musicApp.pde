@@ -14,13 +14,19 @@ void setup() {
   album.resize(400, 250); // Album resized to a rectangular shape (wider than tall)
 
   textAlign(CENTER, CENTER);
-  textFont(createFont("Arial Black", 48));  // Larger text font
+  textFont(createFont("MV Boli", 48));  // Larger text font
   fill(0, 0, 139); // Blue ink color
 }
 
 void draw() {
   background(255);
   float centerX = width / 2;
+
+  // Draw a background rectangle (behind the whole music player)
+  noFill();
+  stroke(0);  // Black border
+  strokeWeight(5);
+  rect(50, 50, width - 100, height - 100);  // Border around the whole music player area
 
   // Title Rectangle (larger size)
   fill(200);
@@ -112,44 +118,45 @@ void draw() {
 
 void mousePressed() {
   float centerX = width / 2;
+  float btnY = 500;
+  float btnSize = 80;
+  float totalButtonWidth = btnSize * 4;
+  float buttonX = centerX - totalButtonWidth / 2;
 
-  // Fast Backward button
-  if (mouseX > centerX - 250 && mouseX < centerX - 170 && mouseY > 500 && mouseY < 580) {
-    int newPos = player.position() - 5000;  // Fast backward by 5 seconds
-    if (newPos < 0) {
-      newPos = 0;  // Prevent going below 0
-    }
-    player.cue(newPos);  // Set the new position using cue()
+  // Fast Backward
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
+    int newPos = player.position() - 5000;
+    player.cue(max(newPos, 0));
   }
 
-  // Play/Pause button
-  if (mouseX > centerX - 170 && mouseX < centerX - 90 && mouseY > 500 && mouseY < 580) {
+  // Play/Pause
+  buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
     if (isPlaying) {
       player.pause();
-      isPlaying = false;  // Update state to 'paused'
+      isPlaying = false;
     } else {
       player.play();
-      isPlaying = true;  // Update state to 'playing'
+      isPlaying = true;
     }
   }
 
-  // Stop button
-  if (mouseX > centerX - 90 && mouseX < centerX + 10 && mouseY > 500 && mouseY < 580) {
+  // Stop
+  buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
     player.pause();
     player.rewind();
-    isPlaying = false;  // Update state to 'paused' after stop
+    isPlaying = false;
   }
 
-  // Fast Forward button
-  if (mouseX > centerX + 10 && mouseX < centerX + 90 && mouseY > 500 && mouseY < 580) {
-    int newPos = player.position() + 5000;  // Fast forward by 5 seconds
-    if (newPos > player.length()) {
-      newPos = player.length();  // Prevent going beyond the song length
-    }
-    player.cue(newPos);  // Set the new position using cue()
+  // Fast Forward
+  buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
+    int newPos = player.position() + 5000;
+    player.cue(min(newPos, player.length()));
   }
 
-  // Quit button
+  // Quit button (same as before)
   if (mouseX > width - 70 && mouseX < width - 30 && mouseY > 20 && mouseY < 60) {
     exit();
   }
