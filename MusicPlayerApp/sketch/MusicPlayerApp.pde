@@ -9,12 +9,19 @@ boolean isPlaying = false;  // To track play/pause state
 void setup() {
   fullScreen();
   minim = new Minim(this);
-  player = minim.loadFile("assets/audio/USO.mp3");
+  
+  // Load the audio file with error handling for metadata
+  try {
+    player = minim.loadFile("assets/audio/USO.mp3");
+  } catch (Exception e) {
+    println("Error loading audio: " + e.getMessage());
+  }
+
   album = loadImage("assets/images/ME-JU.jpg");
-  album.resize(400, 250); // Album resized to a rectangular shape (wider than tall)
+  album.resize(500, 300); // Album resized to a larger rectangular shape (wider than tall)
 
   textAlign(CENTER, CENTER);
-  textFont(createFont("MV Boli", 48));  // Larger text font
+  textFont(createFont("MV Boli", 60));  // Larger text font
   fill(0, 0, 139); // Blue ink color
 }
 
@@ -30,16 +37,16 @@ void draw() {
 
   // Title Rectangle (larger size)
   fill(200);
-  rect(centerX - 250, 50, 500, 80);  // Bigger title rectangle
+  rect(centerX - 300, 50, 600, 100);  // Bigger title rectangle
   fill(0, 0, 139);
-  text("YEET music - Merhawi Haile", centerX, 90);  // Larger text
+  text("YEET music - Merhawi Haile", centerX, 100);  // Larger text
 
-  // Album Image (now a rectangle)
-  image(album, centerX - 200, 150);
+  // Album Image (now a larger rectangle)
+  image(album, centerX - 250, 180);
 
   // Buttons
-  float btnY = 500;  // Move buttons lower for spacing
-  float btnSize = 80;  // Bigger button size
+  float btnY = 550;  // Move buttons lower for spacing
+  float btnSize = 100;  // Bigger button size
   float totalButtonWidth = btnSize * 4; // Total width of all buttons
 
   // Calculate starting X position for the buttons to be centered
@@ -50,8 +57,8 @@ void draw() {
   rect(buttonX, btnY, btnSize, btnSize);  // Fast Backward Square
   fill(0);
   // Fast backward symbol (⏪) - two triangles to the left
-  triangle(buttonX + 35, btnY + 20, buttonX + 35, btnY + 60, buttonX + 5, btnY + 40);  // Left triangle
-  triangle(buttonX + 55, btnY + 20, buttonX + 55, btnY + 60, buttonX + 25, btnY + 40);  // Right triangle
+  triangle(buttonX + 40, btnY + 25, buttonX + 40, btnY + 75, buttonX + 10, btnY + 50);  // Left triangle
+  triangle(buttonX + 60, btnY + 25, buttonX + 60, btnY + 75, buttonX + 30, btnY + 50);  // Right triangle
 
   // Play/Pause Button (same position)
   buttonX += btnSize;  // Move to next button position
@@ -61,11 +68,11 @@ void draw() {
 
   if (isPlaying) {
     // Pause Button (Two rectangles)
-    rect(buttonX + 20, btnY + 20, 15, 40);  // Left rectangle
-    rect(buttonX + 50, btnY + 20, 15, 40);   // Right rectangle
+    rect(buttonX + 25, btnY + 30, 20, 50);  // Left rectangle
+    rect(buttonX + 55, btnY + 30, 20, 50);   // Right rectangle
   } else {
     // Play Button (Triangle)
-    triangle(buttonX + 25, btnY + 20, buttonX + 25, btnY + 60, buttonX + 55, btnY + 40);
+    triangle(buttonX + 35, btnY + 30, buttonX + 35, btnY + 70, buttonX + 65, btnY + 50);
   }
 
   // Stop Button (next to Play/Pause, no space between)
@@ -73,7 +80,7 @@ void draw() {
   fill(180);
   rect(buttonX, btnY, btnSize, btnSize);  // Stop Square
   fill(0);
-  rect(buttonX + 15, btnY + 20, 40, 40);  // Stop symbol (a square)
+  rect(buttonX + 25, btnY + 30, 50, 50);  // Stop symbol (a square)
 
   // Fast Forward Button (after Stop)
   buttonX += btnSize;  // Move to next button position
@@ -81,20 +88,20 @@ void draw() {
   rect(buttonX, btnY, btnSize, btnSize);  // Fast Forward Square
   fill(0);
   // Fast forward symbol (⏩) - two triangles to the right
-  triangle(buttonX + 25, btnY + 20, buttonX + 25, btnY + 60, buttonX + 55, btnY + 40);  // Left triangle
-  triangle(buttonX + 45, btnY + 20, buttonX + 45, btnY + 60, buttonX + 75, btnY + 40);  // Right triangle
+  triangle(buttonX + 35, btnY + 25, buttonX + 35, btnY + 75, buttonX + 65, btnY + 50);  // Left triangle
+  triangle(buttonX + 55, btnY + 25, buttonX + 55, btnY + 75, buttonX + 85, btnY + 50);  // Right triangle
 
   // Music Progress Bar (bigger)
-  float barY = 620;  // Move progress bar lower
-  float barWidth = 500;  // Larger progress bar
+  float barY = 700;  // Move progress bar lower
+  float barWidth = 600;  // Larger progress bar
   fill(220);
-  rect(centerX - 250, barY, barWidth, 25);  // Larger bar
+  rect(centerX - 300, barY, barWidth, 30);  // Larger bar
 
   // Progress fill
   if (player.isPlaying()) {
     float progress = map(player.position(), 0, player.length(), 0, barWidth);
     fill(0, 0, 139);
-    rect(centerX - 250, barY, progress, 25);
+    rect(centerX - 300, barY, progress, 30);
   }
 
   // Time Text - dynamic (larger text)
@@ -105,21 +112,21 @@ void draw() {
   String totalTime = nf(totalMillis / 60000, 2) + ":" + nf((totalMillis / 1000) % 60, 2);
 
   fill(0);
-  textSize(20);  // Larger text size
-  text(currentTime + " / " + totalTime, centerX, barY + 35);
+  textSize(24);  // Larger text size
+  text(currentTime + " / " + totalTime, centerX, barY + 40);
 
   // Quit Button (top-right corner)
   fill(200);
-  rect(width - 70, 20, 40, 40);  // Bigger quit button
+  rect(width - 90, 30, 50, 50);  // Bigger quit button
   fill(255, 0, 0);
-  textSize(24);
-  text("X", width - 50, 40);
+  textSize(30);
+  text("X", width - 60, 55);
 }
 
 void mousePressed() {
   float centerX = width / 2;
-  float btnY = 500;
-  float btnSize = 80;
+  float btnY = 550;
+  float btnSize = 100;
   float totalButtonWidth = btnSize * 4;
   float buttonX = centerX - totalButtonWidth / 2;
 
@@ -157,7 +164,7 @@ void mousePressed() {
   }
 
   // Quit button (same as before)
-  if (mouseX > width - 70 && mouseX < width - 30 && mouseY > 20 && mouseY < 60) {
+  if (mouseX > width - 90 && mouseX < width - 40 && mouseY > 30 && mouseY < 80) {
     exit();
   }
 }
