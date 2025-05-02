@@ -91,18 +91,19 @@ void draw() {
   triangle(buttonX + 35, btnY + 25, buttonX + 35, btnY + 75, buttonX + 65, btnY + 50);  // Left triangle
   triangle(buttonX + 55, btnY + 25, buttonX + 55, btnY + 75, buttonX + 85, btnY + 50);  // Right triangle
 
-  // Music Progress Bar (bigger)
-  float barY = 700;  // Move progress bar lower
-  float barWidth = 600;  // Larger progress bar
-  fill(220);
-  rect(centerX - 300, barY, barWidth, 30);  // Larger bar
+  // Music Progress Bar (bigger display)
+float barY = 700;  
+float barWidth = 100*15;  // Increased display width (was 600)
+fill(220);
+rect(centerX - barWidth / 2, barY, barWidth, 30);  // Wider bar display
 
-  // Progress fill
-  if (player.isPlaying()) {
-    float progress = map(player.position(), 0, player.length(), 0, barWidth);
-    fill(0, 0, 139);
-    rect(centerX - 300, barY, progress, 30);
-  }
+// Progress fill (keep mapping based on original player length)
+if (player.isPlaying()) {
+  float progress = map(player.position(), 0, player.length(), 0, barWidth);
+  fill(0, 0, 139);
+  rect(centerX - barWidth / 2, barY, progress, 30);
+}
+
 
   // Time Text - dynamic (larger text)
   int currentMillis = player.position();
