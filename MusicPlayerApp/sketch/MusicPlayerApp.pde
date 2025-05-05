@@ -4,13 +4,14 @@ Minim minim;
 AudioPlayer player;
 PImage album;
 
-boolean isPlaying = false;  // To track play/pause state
+boolean isPlaying = false;
+boolean isMuted = false;
+float savedVolume = 1.0;
 
 void setup() {
   fullScreen();
   minim = new Minim(this);
-  
-  // Load the audio file with error handling for metadata
+
   try {
     player = minim.loadFile("assets/audio/USO.mp3");
   } catch (Exception e) {
@@ -18,107 +19,120 @@ void setup() {
   }
 
   album = loadImage("assets/images/ME-JU.jpg");
-  album.resize(500, 300); // Album resized to a larger rectangular shape (wider than tall)
+  album.resize(500, 300);
 
   textAlign(CENTER, CENTER);
-  textFont(createFont("MV Boli", 60));  // Larger text font
-  fill(0, 0, 139); // Blue ink color
+  textFont(createFont("MV Boli", 60));
+  fill(0, 0, 139);
 }
 
 void draw() {
   background(255);
   float centerX = width / 2;
 
-  // Draw a background rectangle (behind the whole music player)
   noFill();
-  stroke(0);  // Black border
+  stroke(0);
   strokeWeight(5);
-  rect(50, 50, width - 100, height - 100);  // Border around the whole music player area
+  rect(50, 50, width - 100, height - 100);
 
-  // Title Rectangle (larger size)
   fill(200);
-  rect(centerX - 300, 50, 600, 100);  // Bigger title rectangle
+  rect(centerX - 300, 50, 600, 100);
   fill(0, 0, 139);
-  text("YEET music - Merhawi Haile", centerX, 100);  // Larger text
+  text("YEET music - Merhawi Haile", centerX, 100);
 
-  // Album Image (now a larger rectangle)
   image(album, centerX - 250, 180);
 
-  // Buttons
-  float btnY = 550;  // Move buttons lower for spacing
-  float btnSize = 100;  // Bigger button size
-  float totalButtonWidth = btnSize * 4; // Total width of all buttons
-
-  // Calculate starting X position for the buttons to be centered
+  float btnY = 550;
+  float btnSize = 100;
+  float totalButtonWidth = btnSize * 7; // one extra for mute
   float buttonX = centerX - totalButtonWidth / 2;
 
-  // Fast Backward Button (Before Play/Pause)
+  // Fast Backward
   fill(180);
-  rect(buttonX, btnY, btnSize, btnSize);  // Fast Backward Square
+  rect(buttonX, btnY, btnSize, btnSize);
   fill(0);
-  // Fast backward symbol (⏪) - two triangles to the left
-  triangle(buttonX + 40, btnY + 25, buttonX + 40, btnY + 75, buttonX + 10, btnY + 50);  // Left triangle
-  triangle(buttonX + 60, btnY + 25, buttonX + 60, btnY + 75, buttonX + 30, btnY + 50);  // Right triangle
+  triangle(buttonX + 40, btnY + 25, buttonX + 40, btnY + 75, buttonX + 10, btnY + 50);
+  triangle(buttonX + 60, btnY + 25, buttonX + 60, btnY + 75, buttonX + 30, btnY + 50);
 
-  // Play/Pause Button (same position)
-  buttonX += btnSize;  // Move to next button position
+  // Play/Pause
+  buttonX += btnSize;
   fill(180);
-  rect(buttonX, btnY, btnSize, btnSize);  // Play/Pause Square
+  rect(buttonX, btnY, btnSize, btnSize);
   fill(0);
-
   if (isPlaying) {
-    // Pause Button (Two rectangles)
-    rect(buttonX + 25, btnY + 30, 20, 50);  // Left rectangle
-    rect(buttonX + 55, btnY + 30, 20, 50);   // Right rectangle
+    rect(buttonX + 25, btnY + 30, 20, 50);
+    rect(buttonX + 55, btnY + 30, 20, 50);
   } else {
-    // Play Button (Triangle)
     triangle(buttonX + 35, btnY + 30, buttonX + 35, btnY + 70, buttonX + 65, btnY + 50);
   }
 
-  // Stop Button (next to Play/Pause, no space between)
-  buttonX += btnSize;  // Move to next button position
+  // Stop
+  buttonX += btnSize;
   fill(180);
-  rect(buttonX, btnY, btnSize, btnSize);  // Stop Square
+  rect(buttonX, btnY, btnSize, btnSize);
   fill(0);
-  rect(buttonX + 25, btnY + 30, 50, 50);  // Stop symbol (a square)
+  rect(buttonX + 25, btnY + 30, 50, 50);
 
-  // Fast Forward Button (after Stop)
-  buttonX += btnSize;  // Move to next button position
+  // Fast Forward
+  buttonX += btnSize;
   fill(180);
-  rect(buttonX, btnY, btnSize, btnSize);  // Fast Forward Square
+  rect(buttonX, btnY, btnSize, btnSize);
   fill(0);
-  // Fast forward symbol (⏩) - two triangles to the right
-  triangle(buttonX + 35, btnY + 25, buttonX + 35, btnY + 75, buttonX + 65, btnY + 50);  // Left triangle
-  triangle(buttonX + 55, btnY + 25, buttonX + 55, btnY + 75, buttonX + 85, btnY + 50);  // Right triangle
+  triangle(buttonX + 35, btnY + 25, buttonX + 35, btnY + 75, buttonX + 65, btnY + 50);
+  triangle(buttonX + 55, btnY + 25, buttonX + 55, btnY + 75, buttonX + 85, btnY + 50);
 
-  // Music Progress Bar (bigger display)
-float barY = 700;  
-float barWidth = 100*15;  // Increased display width (was 600)
-fill(220);
-rect(centerX - barWidth / 2, barY, barWidth, 30);  // Wider bar display
+  // Next
+  buttonX += btnSize;
+  fill(180);
+  rect(buttonX, btnY, btnSize, btnSize);
+  fill(0);
+  triangle(buttonX + 35, btnY + 25, buttonX + 35, btnY + 75, buttonX + 65, btnY + 50);
+  rect(buttonX + 70, btnY + 25, 10, 50);
 
-// Progress fill (keep mapping based on original player length)
-if (player.isPlaying()) {
-  float progress = map(player.position(), 0, player.length(), 0, barWidth);
-  fill(0, 0, 139);
-  rect(centerX - barWidth / 2, barY, progress, 30);
-}
+  // Previous
+  buttonX += btnSize;
+  fill(180);
+  rect(buttonX, btnY, btnSize, btnSize);
+  fill(0);
+  triangle(buttonX + 65, btnY + 25, buttonX + 65, btnY + 75, buttonX + 35, btnY + 50);
+  rect(buttonX + 25, btnY + 25, 10, 50);
 
+  // Mute/Unmute (toggle button)
+  buttonX += btnSize;
+  fill(180);
+  rect(buttonX, btnY, btnSize, btnSize);
+  fill(0);
+  if (isMuted) {
+    line(buttonX + 30, btnY + 30, buttonX + 70, btnY + 70);
+    line(buttonX + 70, btnY + 30, buttonX + 30, btnY + 70);
+  } else {
+    triangle(buttonX + 40, btnY + 35, buttonX + 40, btnY + 65, buttonX + 60, btnY + 50);
+    rect(buttonX + 60, btnY + 40, 10, 20);
+  }
 
-  // Time Text - dynamic (larger text)
+  // Progress Bar
+  float barY = 700;
+  float barWidth = 100 * 15;
+  fill(220);
+  rect(centerX - barWidth / 2, barY, barWidth, 30);
+
+  if (player.isPlaying()) {
+    float progress = map(player.position(), 0, player.length(), 0, barWidth);
+    fill(0, 0, 139);
+    rect(centerX - barWidth / 2, barY, progress, 30);
+  }
+
   int currentMillis = player.position();
   int totalMillis = player.length();
-
   String currentTime = nf(currentMillis / 60000, 2) + ":" + nf((currentMillis / 1000) % 60, 2);
   String totalTime = nf(totalMillis / 60000, 2) + ":" + nf((totalMillis / 1000) % 60, 2);
-
   fill(0);
-  textSize(24);  // Larger text size
+  textSize(24);
   text(currentTime + " / " + totalTime, centerX, barY + 40);
 
-  // Quit Button (top-right corner)
+  // Quit Button
   fill(200);
-  rect(width - 90, 30, 50, 50);  // Bigger quit button
+  rect(width - 90, 30, 50, 50);
   fill(255, 0, 0);
   textSize(30);
   text("X", width - 60, 55);
@@ -128,7 +142,7 @@ void mousePressed() {
   float centerX = width / 2;
   float btnY = 550;
   float btnSize = 100;
-  float totalButtonWidth = btnSize * 4;
+  float totalButtonWidth = btnSize * 7;
   float buttonX = centerX - totalButtonWidth / 2;
 
   // Fast Backward
@@ -164,7 +178,26 @@ void mousePressed() {
     player.cue(min(newPos, player.length()));
   }
 
-  // Quit button (same as before)
+  // Next
+  buttonX += btnSize;
+
+  // Previous
+  buttonX += btnSize;
+
+  // Mute/Unmute
+  buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
+    if (isMuted) {
+      player.setGain(savedVolume);  // Restore original volume
+      isMuted = false;
+    } else {
+      savedVolume = player.getGain(); // Save current volume before muting
+      player.setGain(-80);  // Mute
+      isMuted = true;
+    }
+  }
+
+  // Quit
   if (mouseX > width - 90 && mouseX < width - 40 && mouseY > 30 && mouseY < 80) {
     exit();
   }
