@@ -8,18 +8,30 @@ boolean isPlaying = false;
 boolean isMuted = false;
 float savedVolume = 1.0;
 
+String[] songs = {
+  "assets/audio/USO.mp3",      // Jey Uso
+  "assets/audio/OTC.mp3",      // Roman Reigns
+  "assets/audio/U-CAN'T-SEE-ME.mp3"  // John Cena
+};
+
+String[] albums = {
+  "assets/images/ME-JU.jpg",   // Jey Uso
+  "assets/images/1316.jpg",    // Roman Reigns
+  "assets/images/JC.jpg"        // John Cena
+};
+
+String[] titles = {
+  "YEET music - Merhawi Haile",        // Jey Uso
+  "OTC Music - Merhawi Haile",         // Roman Reigns
+  "The Time Is Now music - Merhawi"    // John Cena
+};
+
+int currentSong = 0;
+
 void setup() {
   fullScreen();
   minim = new Minim(this);
-
-  try {
-    player = minim.loadFile("assets/audio/USO.mp3");
-  } catch (Exception e) {
-    println("Error loading audio: " + e.getMessage());
-  }
-
-  album = loadImage("assets/images/ME-JU.jpg");
-  album.resize(500, 300);
+  loadSong(currentSong);
 
   textAlign(CENTER, CENTER);
   textFont(createFont("MV Boli", 60));
@@ -38,13 +50,15 @@ void draw() {
   fill(200);
   rect(centerX - 300, 50, 600, 100);
   fill(0, 0, 139);
-  text("YEET music - Merhawi Haile", centerX, 100);
+  
+  // Display title
+  text(titles[currentSong], centerX, 100);
 
   image(album, centerX - 250, 180);
 
   float btnY = 550;
   float btnSize = 100;
-  float totalButtonWidth = btnSize * 7; // one extra for mute
+  float totalButtonWidth = btnSize * 7;
   float buttonX = centerX - totalButtonWidth / 2;
 
   // Fast Backward
@@ -97,7 +111,7 @@ void draw() {
   triangle(buttonX + 65, btnY + 25, buttonX + 65, btnY + 75, buttonX + 35, btnY + 50);
   rect(buttonX + 25, btnY + 25, 10, 50);
 
-  // Mute/Unmute (toggle button)
+  // Mute/Unmute
   buttonX += btnSize;
   fill(180);
   rect(buttonX, btnY, btnSize, btnSize);
@@ -180,19 +194,27 @@ void mousePressed() {
 
   // Next
   buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
+    currentSong = (currentSong + 1) % songs.length;
+    loadSong(currentSong);
+  }
 
   // Previous
   buttonX += btnSize;
+  if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
+    currentSong = (currentSong - 1 + songs.length) % songs.length;
+    loadSong(currentSong);
+  }
 
   // Mute/Unmute
   buttonX += btnSize;
   if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
     if (isMuted) {
-      player.setGain(savedVolume);  // Restore original volume
+      player.setGain(savedVolume);
       isMuted = false;
     } else {
-      savedVolume = player.getGain(); // Save current volume before muting
-      player.setGain(-80);  // Mute
+      savedVolume = player.getGain();
+      player.setGain(-80);
       isMuted = true;
     }
   }
@@ -201,4 +223,14 @@ void mousePressed() {
   if (mouseX > width - 90 && mouseX < width - 40 && mouseY > 30 && mouseY < 80) {
     exit();
   }
+}
+
+void loadSong(int index) {
+  if (player != null) {
+    player.close();
+  }
+  player = minim.loadFile(songs[index]);
+  album = loadImage(albums[index]);
+  album.resize(500, 300);
+  isPlaying = false;
 }
