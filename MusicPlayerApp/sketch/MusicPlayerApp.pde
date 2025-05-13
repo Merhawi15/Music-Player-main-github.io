@@ -1,105 +1,121 @@
-// Import the Minim library for audio playback
+/**
+ * MUSIC PLAYER APP by Merhawi Haile
+ * 
+ * WHAT EACH PART DOES:
+ * 
+ * setup() – Starts the app, loads the first song and album.
+ * draw() – Draws everything on screen (background, buttons, song info).
+ * drawButtons() – Shows 8 buttons for controlling the music.
+ * drawButtonIcon() – Puts a symbol (like play or pause) on each button.
+ * drawProgressBar() – Shows how much of the song has played.
+ * drawQuitButton() – Shows the red "X" to quit the app.
+ * mousePressed() – Checks if a button or the quit box was clicked.
+ * handleButtonPress() – Does what each button should do (like play, skip).
+ * loadSong() – Loads a new song and album image.
+ */
+
+// Import audio library
 import ddf.minim.*;
 
-// Declare Minim and AudioPlayer objects to manage music
+// Setup for audio
 Minim minim;
 AudioPlayer player;
 
-// Image object to hold the album cover for the current song
+// Image for song cover
 PImage album;
 
-// A boolean to keep track of whether a song is playing or not
+// Track if song is playing
 boolean isPlaying = false;
 
-// Index to track which song is currently selected
+// Keep track of current song
 int currentSong = 0;
 
-// Array holding file paths to the audio files
+// List of songs
 String[] songs = {
-  "assets/audio/USO.mp3",             // YEET music by Merhawi Haile
-  "assets/audio/OTC.mp3",             // OTC music by Merhawi Haile
-  "assets/audio/U-CAN'T-SEE-ME.mp3"   // The Time Is Now (John Cena's theme)
+  "assets/audio/USO.mp3",
+  "assets/audio/OTC.mp3",
+  "assets/audio/U-CAN'T-SEE-ME.mp3"
 };
 
-// Array holding file paths to the album images that match each song
+// List of album pictures
 String[] albums = {
-  "assets/images/ME-JU.jpg",  // Album art for USO.mp3
-  "assets/images/1316.jpg",   // Album art for OTC.mp3
-  "assets/images/JC.jpg"      // Album art for U-CAN'T-SEE-ME.mp3
+  "assets/images/ME-JU.jpg",
+  "assets/images/1316.jpg",
+  "assets/images/JC.jpg"
 };
 
-// Titles to be displayed on screen for each song
+// Song titles
 String[] titles = {
   "YEET music - Merhawi Haile",
   "OTC Music - Merhawi Haile",
   "The Time Is Now music - Merhawi"
 };
 
-// Setup function is called once at the start
+// Run once at start
 void setup() {
-  fullScreen();                 // Open the app in full screen
-  minim = new Minim(this);      // Initialize Minim for audio
-  loadSong(currentSong);        // Load the first song
+  fullScreen();
+  minim = new Minim(this);
+  loadSong(currentSong);
   
-  textAlign(CENTER, CENTER);    // Set text alignment to center
-  textFont(createFont("MV Boli", 60));  // Use fun MV Boli font
-  fill(0, 0, 139);              // Dark blue text color
+  textAlign(CENTER, CENTER);
+  textFont(createFont("MV Boli", 60));
+  fill(0, 0, 139);
 }
 
-// draw() function runs continuously to update the screen
+// Keeps running
 void draw() {
-  background(255); // White background
-  float centerX = width / 2; // Horizontal center of the screen
+  background(255);
+  float centerX = width / 2;
 
-  // Draw outer border for design
+  // Border
   noFill();
   stroke(0);
   strokeWeight(5);
   rect(50, 50, width - 100, height - 100);
   
-  // Draw a gray bar to show the current song title
+  // Song title bar
   fill(200);
   rect(centerX - 300, 50, 600, 100);
   fill(0, 0, 139);
-  text(titles[currentSong], centerX, 100); // Show current song title
+  text(titles[currentSong], centerX, 100);
   
-  // Display the current album image
+  // Show album picture
   image(album, centerX - 250, 180);
   
-  // Draw all control buttons
+  // Show buttons
   drawButtons(centerX);
 
-  // Show the current song progress
+  // Show song progress
   drawProgressBar(centerX);
   
-  // Display a red "X" quit button
+  // Show quit button
   drawQuitButton();
 }
 
-// Draws all 8 control buttons (play, stop, forward, etc.)
+// Draw buttons
 void drawButtons(float centerX) {
-  float btnY = 550;  // Vertical position for buttons
-  float btnSize = 100; // Button size
-  float totalButtonWidth = btnSize * 8; // Total width of all buttons
-  float buttonX = centerX - totalButtonWidth / 2; // Start position for buttons
+  float btnY = 550;
+  float btnSize = 100;
+  float totalButtonWidth = btnSize * 8;
+  float buttonX = centerX - totalButtonWidth / 2;
   
   for (int i = 0; i < 8; i++) {
     fill(180);
-    rect(buttonX, btnY, btnSize, btnSize); // Draw button
+    rect(buttonX, btnY, btnSize, btnSize);
     fill(0);
-    drawButtonIcon(i, buttonX, btnY); // Draw symbol on button
-    buttonX += btnSize; // Move to next button position
+    drawButtonIcon(i, buttonX, btnY);
+    buttonX += btnSize;
   }
 }
 
-// Draws the icon (triangle, rectangle, etc.) for each control button
+// Draw symbol on each button
 void drawButtonIcon(int index, float x, float y) {
   switch (index) {
-    case 0: // Fast Backward
+    case 0:
       triangle(x + 40, y + 25, x + 40, y + 75, x + 10, y + 50);
       triangle(x + 60, y + 25, x + 60, y + 75, x + 30, y + 50);
       break;
-    case 1: // Play or Pause depending on current state
+    case 1:
       if (isPlaying) {
         rect(x + 25, y + 30, 20, 50);
         rect(x + 55, y + 30, 20, 50);
@@ -107,45 +123,42 @@ void drawButtonIcon(int index, float x, float y) {
         triangle(x + 35, y + 30, x + 35, y + 70, x + 65, y + 50);
       }
       break;
-    case 2: // Stop
+    case 2:
       rect(x + 25, y + 30, 50, 50);
       break;
-    case 3: // Fast Forward
+    case 3:
       triangle(x + 35, y + 25, x + 35, y + 75, x + 65, y + 50);
       triangle(x + 55, y + 25, x + 55, y + 75, x + 85, y + 50);
       break;
-    case 4: // Next
+    case 4:
       triangle(x + 35, y + 25, x + 35, y + 75, x + 65, y + 50);
       rect(x + 70, y + 25, 10, 50);
       break;
-    case 5: // Previous
+    case 5:
       triangle(x + 65, y + 25, x + 65, y + 75, x + 35, y + 50);
       rect(x + 25, y + 25, 10, 50);
       break;
-    case 6: // Mute (icon not used yet)
+    case 6:
       break;
-    case 7: // Loop (icon not used yet)
+    case 7:
       break;
   }
 }
 
-// Draws the progress bar and displays time elapsed and total time
+// Progress bar and time
 void drawProgressBar(float centerX) {
   float barY = 700;
-  float barWidth = 100 * 15;  // Long progress bar
+  float barWidth = 100 * 15;
   
-  // Draw the full empty bar
   fill(220);
   rect(centerX - barWidth / 2, barY, barWidth, 30);
   
-  // Fill progress bar depending on how much of the song has played
   if (player.isPlaying()) {
     float progress = map(player.position(), 0, player.length(), 0, barWidth);
     fill(0, 0, 139);
     rect(centerX - barWidth / 2, barY, progress, 30);
   }
 
-  // Show current time and total time
   int currentMillis = player.position();
   int totalMillis = player.length();
   String currentTime = nf(currentMillis / 60000, 2) + ":" + nf((currentMillis / 1000) % 60, 2);
@@ -156,7 +169,7 @@ void drawProgressBar(float centerX) {
   text(currentTime + " / " + totalTime, centerX, barY + 40);
 }
 
-// Draw the red "X" button in the top-right corner to quit the app
+// Draw quit box
 void drawQuitButton() {
   fill(200);
   rect(width - 90, 30, 50, 50);
@@ -165,7 +178,7 @@ void drawQuitButton() {
   text("X", width - 60, 55);
 }
 
-// Handle mouse clicks for buttons
+// When user clicks
 void mousePressed() {
   float centerX = width / 2;
   float btnY = 550;
@@ -173,7 +186,6 @@ void mousePressed() {
   float totalButtonWidth = btnSize * 8;
   float buttonX = centerX - totalButtonWidth / 2;
   
-  // Check if user clicked any of the 8 control buttons
   for (int i = 0; i < 8; i++) {
     if (mouseX > buttonX && mouseX < buttonX + btnSize && mouseY > btnY && mouseY < btnY + btnSize) {
       handleButtonPress(i);
@@ -181,19 +193,18 @@ void mousePressed() {
     buttonX += btnSize;
   }
 
-  // Check if user clicked the quit button
   if (mouseX > width - 90 && mouseX < width - 40 && mouseY > 30 && mouseY < 80) {
-    exit();  // Close the application
+    exit();
   }
 }
 
-// Handle the behavior of each control button when clicked
+// What buttons do
 void handleButtonPress(int index) {
   switch (index) {
-    case 0:  // Rewind by 5 seconds
+    case 0:
       player.cue(max(player.position() - 5000, 0));
       break;
-    case 1:  // Toggle play/pause
+    case 1:
       if (isPlaying) {
         player.pause();
         isPlaying = false;
@@ -202,36 +213,36 @@ void handleButtonPress(int index) {
         isPlaying = true;
       }
       break;
-    case 2:  // Stop and rewind
+    case 2:
       player.pause();
       player.rewind();
       isPlaying = false;
       break;
-    case 3:  // Fast forward by 5 seconds
+    case 3:
       player.cue(min(player.position() + 5000, player.length()));
       break;
-    case 4:  // Next song
+    case 4:
       currentSong = (currentSong + 1) % songs.length;
       loadSong(currentSong);
       break;
-    case 5:  // Previous song
+    case 5:
       currentSong = (currentSong - 1 + songs.length) % songs.length;
       loadSong(currentSong);
       break;
-    case 6:  // Mute button not used yet
+    case 6:
       break;
-    case 7:  // Loop button not used yet
+    case 7:
       break;
   }
 }
 
-// Loads a new song and image based on selected index
+// Load new song and image
 void loadSong(int index) {
   if (player != null) {
-    player.close();  // Stop and close current player
+    player.close();
   }
-  player = minim.loadFile(songs[index]);  // Load new audio
-  album = loadImage(albums[index]);       // Load new album image
-  album.resize(500, 300);                 // Resize album to fit display
-  isPlaying = false;                      // Start in paused state
+  player = minim.loadFile(songs[index]);
+  album = loadImage(albums[index]);
+  album.resize(500, 300);
+  isPlaying = false;
 }
