@@ -1,263 +1,209 @@
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
-
-Minim minim;
-AudioPlayer song;
-PImage albumImg;
-PFont mvBoliFont;
-
-boolean isPlaying = false;
-
-String[] titles = {
-  "YEET music by Merhawi Haile",
-  "Roman Reigns - I Am Greatness",
-  "John Cena - The Time Is Now"
-};
-
-String[] audioPaths = {
-  "assets/audio/USO.mp3",
-  "assets/audio/OTC.mp3",
-  "assets/audio/U-CAN'T-SEE-ME.mp3"
-};
-
-String[] imagePaths = {
-  "assets/images/ME-JU.jpg",
-  "assets/images/1316.jpg",
-  "assets/images/JC.jpg"
-};
-
-color[] titleColors = {
-  color(0, 0, 255),     // Blue for Jey Uso
-  color(255, 165, 0),   // Orange for Roman
-  color(0, 200, 0)      // Green for Cena
-};
-
-int currentSongIndex = 0;
-
+// Purpose: combine prototyped 2D Music Button Symbols
+//
+//Library - Minim
+//
+//Global Variables
+float quitX, quitY, quitWidth, quitHeight;
+float imageDivX, imageDivY, imageDivWidth, imageDivHeight;
+float stopDivX, stopDivY, stopDivWidth, stopDivHeight;
+float muteDivX, muteDivY, muteDivWidth, muteDivHeight;
+float previousDivX, previousDivY, previousDivWidth, previousDivHeight;
+float fastRewindDivX, fastRewindDivY, fastRewindDivWidth, fastRewindDivHeight;
+float pauseDivX, pauseDivY, pauseDivWidth, pauseDivHeight;
+float playDivX, playDivY, playDivWidth, playDivHeight;
+float loopOnceDivX, loopOnceDivY, loopOnceDivWidth, loopOnceDivHeight;
+float loopInfiniteDivX, loopInfiniteDivY, loopInfiniteDivWidth, loopInfiniteDivHeight;
+float fastForwardDivX, fastForwardDivY, fastForwardDivWidth, fastForwardDivHeight;
+float nextDivX, nextDivY, nextDivWidth, nextDivHeight;
+float shuffleDivX, shuffleDivY, shuffleDivWidth, shuffleDivHeight;
+float songPositionDivX, songPositionDivY, songPositionDivWidth, songPositionDivHeight;
+float timeRemainingDivX, timeRemainingDivY, timeRemainingDivWidth, timeRemainingDivHeight;
+float songTitleDivX, songTitleDivY, songTitleDivWidth, songTitleDivHeight;
+float timeBarDivX, timeBarDivY, timeBarDivWidth, timeBarDivHeight;
+float totalTimeDivX, totalTimeDivY, totalTimeDivWidth, totalTimeDivHeight;
+//Button Variables after
+float stopButtonX, stopButtonY, stopButtonWidth, stopButtonHeight;
+float playX1, playY1, playX2, playY2, playX3, playY3;
+float fastForwardX1, fastForwardY1, fastForwardX2, fastForwardY2, fastForwardX3, fastForwardY3;
+float fastForwardX4, fastForwardY4, fastForwardX5, fastForwardY5, fastForwardX6, fastForwardY6;
+float pauseX1, pauseY1, pauseWidth1, pauseHeight1;
+float pauseX2, pauseY2, pauseWidth2, pauseHeight2;
+//
 void setup() {
+  // Display
   fullScreen();
-  mvBoliFont = loadFont("MVBoli-48.vlw");
-  minim = new Minim(this);
-  loadCurrentSong();
-}
-
+  int appWidth = displayWidth;
+  int appHeight = displayHeight;
+  int appShortSide = ( appWidth < appHeight ) ? appWidth : appHeight ;
+  //
+  //Population
+  quitX = appWidth - appShortSide*1/20;
+  quitY = 0;
+  quitWidth = appShortSide*1/20;
+  quitHeight = appShortSide*1/20;
+  imageDivX = appWidth*1/4;
+  imageDivY = appHeight*1/5;
+  imageDivWidth = appWidth*1/2;
+  imageDivHeight = appHeight*1.5/5; //1+1.5=2.5, half of the total height
+  songTitleDivX = appWidth*1/4;
+  songTitleDivY = appHeight*1/20;
+  songTitleDivWidth = appWidth*1/2;
+  songTitleDivHeight = appHeight*1/10;
+  //
+  //rect(DIV) is a square to start, by design
+  int numberOfButtons = 13; //Half a button on either side as space, Center Button is Play
+  println("Button Width:", appWidth/numberOfButtons);
+  int widthOfButton = appWidth/numberOfButtons;
+  int beginningButtonSpace = widthOfButton;
+  int buttonY = appHeight*3/5;
+  stopDivX = beginningButtonSpace + widthOfButton*0;
+  stopDivY = buttonY;
+  stopDivWidth = widthOfButton;
+  stopDivHeight = widthOfButton;
+  //
+  //STOP BUTTON
+  stopButtonX = stopDivX + stopDivWidth*1/4;
+  stopButtonY = stopDivY + stopDivHeight*1/4;
+  stopButtonWidth = widthOfButton*1/2;
+  stopButtonHeight = widthOfButton*1/2;
+  //
+  muteDivX = beginningButtonSpace + widthOfButton*1;
+  muteDivY = buttonY;
+  muteDivWidth = widthOfButton;
+  muteDivHeight = widthOfButton;
+  previousDivX = beginningButtonSpace + widthOfButton*2;
+  previousDivY = buttonY;
+  previousDivWidth = widthOfButton;
+  previousDivHeight = widthOfButton;
+  fastRewindDivX = beginningButtonSpace + widthOfButton*3;
+  fastRewindDivY = buttonY;
+  fastRewindDivWidth = widthOfButton;
+  fastRewindDivHeight = widthOfButton;
+  pauseDivX = beginningButtonSpace + widthOfButton*4;
+  pauseDivY = buttonY;
+  pauseDivWidth = widthOfButton;
+  pauseDivHeight = widthOfButton;
+  //
+  //Pause Button
+  pauseX1 = pauseDivX + pauseDivWidth*1/4;
+  pauseY1 = pauseDivY + pauseDivHeight*1/4;
+  pauseWidth1 = pauseDivWidth*1/8;
+  pauseHeight1 = pauseDivHeight*1/2;
+  pauseX2 = pauseDivX + pauseDivWidth*5/8;
+  pauseY2 = pauseDivY + pauseDivHeight*1/4;
+  pauseWidth2 = pauseDivWidth*1/8;
+  pauseHeight2 = pauseDivHeight*1/2;
+  //
+  playDivX = beginningButtonSpace + widthOfButton*5; //TEACHER Only" manipulate this number to draw simulate all buttons
+  playDivY = buttonY;
+  playDivWidth = widthOfButton;
+  playDivHeight = widthOfButton;
+  //
+  //Play Button
+  playX1 = playDivX + playDivWidth*1/4;
+  playY1 = playDivY + playDivHeight*1/4;
+  playX2 = playDivX + playDivWidth*3/4;
+  playY2 = playDivY + playDivHeight*1/2;
+  playX3 = playDivX + playDivWidth*1/4;
+  playY3 = playDivY + playDivHeight*3/4;
+  //
+  loopOnceDivX = beginningButtonSpace + widthOfButton*6;
+  loopOnceDivY = buttonY;
+  loopOnceDivWidth = widthOfButton;
+  loopOnceDivHeight = widthOfButton;
+  loopInfiniteDivX = beginningButtonSpace + widthOfButton*7;
+  loopInfiniteDivY = buttonY;
+  loopInfiniteDivWidth = widthOfButton;
+  loopInfiniteDivHeight = widthOfButton;
+  fastForwardDivX = beginningButtonSpace + widthOfButton*8;
+  fastForwardDivY = buttonY;
+  fastForwardDivWidth = widthOfButton;
+  fastForwardDivHeight = widthOfButton;
+  //
+  //Fast Forward Button
+  fastForwardX1 = fastForwardDivX + fastForwardDivWidth*1/4;
+  fastForwardY1 = fastForwardDivY + fastForwardDivHeight*1/4;
+  fastForwardX2 = fastForwardDivX + fastForwardDivWidth*1/2;
+  fastForwardY2 = fastForwardDivY + fastForwardDivHeight*1/2;
+  fastForwardX3 = fastForwardDivX + fastForwardDivWidth*1/4;
+  fastForwardY3 = fastForwardDivY + fastForwardDivHeight*3/4;
+  fastForwardX4 = fastForwardDivX + fastForwardDivWidth*1/2;
+  fastForwardY4 = fastForwardDivY + fastForwardDivHeight*1/4;
+  fastForwardX5 = fastForwardDivX + fastForwardDivWidth*3/4;
+  fastForwardY5 = fastForwardDivY + fastForwardDivHeight*1/2;
+  fastForwardX6 = fastForwardDivX + fastForwardDivWidth*1/2;
+  fastForwardY6 = fastForwardDivY + fastForwardDivHeight*3/4;
+  //
+  nextDivX = beginningButtonSpace + widthOfButton*9;
+  nextDivY = buttonY;
+  nextDivWidth = widthOfButton;
+  nextDivHeight = widthOfButton;
+  shuffleDivX = beginningButtonSpace + widthOfButton*10;
+  shuffleDivY = buttonY;
+  shuffleDivWidth = widthOfButton;
+  shuffleDivHeight = widthOfButton;
+  //
+  float musicSongPaddingY = widthOfButton*1/4;
+  float musicSongSpaceX = stopDivX;
+  float musicSongSpaceY = stopDivY + widthOfButton + musicSongPaddingY;
+  float musicSongSpaceWidth = appWidth - widthOfButton*2;
+  float musicSongSpaceHeight = appHeight - musicSongPaddingY - musicSongSpaceY;
+  //rect(musicSongSpaceX, musicSongSpaceY, musicSongSpaceWidth, musicSongSpaceHeight); //testing only
+  songPositionDivX = musicSongSpaceX;
+  songPositionDivY = musicSongSpaceY;
+  songPositionDivWidth = musicSongSpaceWidth*1/5;
+  songPositionDivHeight = musicSongSpaceHeight*2/5;  
+  timeRemainingDivX = musicSongSpaceX + musicSongSpaceWidth*3/5;
+  timeRemainingDivY = musicSongSpaceY + musicSongSpaceHeight*3/5;
+  timeRemainingDivWidth = musicSongSpaceWidth*1/5;
+  timeRemainingDivHeight = musicSongSpaceHeight*2/5;
+  totalTimeDivX = musicSongSpaceX + musicSongSpaceWidth*4/5;
+  totalTimeDivY = musicSongSpaceY + musicSongSpaceHeight*3/5;
+  totalTimeDivWidth = musicSongSpaceWidth*1/5;
+  totalTimeDivHeight = musicSongSpaceHeight*2/5;
+  float musicSongSpaceButtonHeight = musicSongSpaceHeight*1/5;
+  timeBarDivX = musicSongSpaceX;
+  timeBarDivY = musicSongSpaceY + musicSongSpaceHeight*2/5;
+  timeBarDivWidth = musicSongSpaceWidth;
+  timeBarDivHeight = musicSongSpaceHeight*1/5;
+  //
+  //DIVs
+  //rect(X, Y, Width, Height)
+  rect(quitX, quitY, quitWidth, quitHeight);
+  rect(imageDivX, imageDivY, imageDivWidth, imageDivHeight);
+  rect(stopDivX, stopDivY, stopDivWidth, stopDivHeight);  //*0
+  rect(muteDivX, muteDivY, muteDivWidth, muteDivHeight); //*1
+  rect(previousDivX, previousDivY, previousDivWidth, previousDivHeight); //*2
+  rect(fastRewindDivX, fastRewindDivY, fastRewindDivWidth, fastRewindDivHeight); //*3
+  rect(pauseDivX, pauseDivY, pauseDivWidth, pauseDivHeight); //*4
+  rect(playDivX, playDivY, playDivWidth, playDivHeight); //*5
+  rect(loopOnceDivX, loopOnceDivY, loopOnceDivWidth, loopOnceDivHeight);
+  rect(loopInfiniteDivX, loopInfiniteDivY, loopInfiniteDivWidth, loopInfiniteDivHeight);
+  rect(fastForwardDivX, fastForwardDivY, fastForwardDivWidth, fastForwardDivHeight);
+  rect(nextDivX, nextDivY, nextDivWidth, nextDivHeight);
+  rect(shuffleDivX, shuffleDivY, shuffleDivWidth, shuffleDivHeight);
+  rect(songPositionDivX, songPositionDivY, songPositionDivWidth, songPositionDivHeight);
+  rect(songTitleDivX, songTitleDivY, songTitleDivWidth, songTitleDivHeight);
+  rect(timeBarDivX, timeBarDivY, timeBarDivWidth, timeBarDivHeight);
+  rect(timeRemainingDivX, timeRemainingDivY, timeRemainingDivWidth, timeRemainingDivHeight);
+  rect(totalTimeDivX, totalTimeDivY, totalTimeDivWidth, totalTimeDivHeight);
+  //
+  //rect(timeBarDivX, timeBarDivY, timeBarDivWidth, timeBarDivHeight);
+  rect(stopButtonX, stopButtonY, stopButtonWidth, stopButtonHeight);
+  triangle(playX1, playY1, playX2, playY2, playX3, playY3);
+  triangle(fastForwardX1, fastForwardY1, fastForwardX2, fastForwardY2, fastForwardX3, fastForwardY3);
+  triangle(fastForwardX4, fastForwardY4, fastForwardX5, fastForwardY5, fastForwardX6, fastForwardY6);
+  rect(pauseX1, pauseY1, pauseWidth1, pauseHeight1);
+  rect(pauseX2, pauseY2, pauseWidth2, pauseHeight2);
+} //End setup
+//
 void draw() {
-  background(255);
-  int appWidth = displayWidth;
-  int appHeight = displayHeight;
-
-  float titleHeight = 60;
-  float topMargin = 20;
-  float albumX = appWidth * 1/4;
-  float albumWidth = appWidth * 1/2;
-  float albumY = topMargin + titleHeight + 20;
-  float albumHeight = appHeight * 1/3;
-
-  fill(220);
-  stroke(0);
-  strokeWeight(2);
-  rect(albumX, topMargin, albumWidth, titleHeight);
-  fill(titleColors[currentSongIndex]);
-  textFont(mvBoliFont);
-  textAlign(CENTER, CENTER);
-  text(titles[currentSongIndex], appWidth / 2, topMargin + titleHeight / 2);
-
-  image(albumImg, albumX, albumY, albumWidth, albumHeight);
-
-  float buttonWidth = appWidth / 12;
-  float buttonHeight = buttonWidth;
-  float buttonY = albumY + albumHeight + 20;
-
-  fill(180);
-  stroke(0);
-  strokeWeight(1);
-  for (int i = 0; i < 12; i++) {
-    float buttonX = buttonWidth * i;
-    rect(buttonX, buttonY, buttonWidth, buttonHeight);
-  }
-
-  fill(0);
-  for (int i = 0; i < 12; i++) {
-    float buttonX = buttonWidth * i;
-    float centerX = buttonX + buttonWidth / 2;
-    float centerY = buttonY + buttonHeight / 2;
-    float size = buttonWidth / 3;
-    float gap = 5;
-
-   if (i == 2) {
-  // Rectangle on the left
-  rect(centerX - size / 2, centerY - size / 2, size / 5, size);
-  // Triangle pointing left, right after the rect
-  triangle(centerX - size / 2 + size / 5, centerY,
-           centerX + size / 2, centerY - size / 2,
-           centerX + size / 2, centerY + size / 2);
-}
-
-
-    if (i == 4) {
-      triangle(centerX + size + gap, centerY - size / 2, centerX + size + gap, centerY + size / 2, centerX + gap, centerY);
-      triangle(centerX, centerY - size / 2, centerX, centerY + size / 2, centerX - size, centerY);
-    }
-
-    if (i == 5) {
-      if (isPlaying) {
-        float barWidth = size / 4;
-        rect(centerX - barWidth - 2, centerY - size / 2, barWidth, size);
-        rect(centerX + 2, centerY - size / 2, barWidth, size);
-      } else {
-        triangle(centerX - size / 2, centerY - size / 2, centerX - size / 2, centerY + size / 2, centerX + size / 2, centerY);
-      }
-    }
-
-    if (i == 6) {
-      rect(centerX - size / 2, centerY - size / 2, size, size);
-    }
-
-    if (i == 7) {
-      triangle(centerX - size - gap, centerY - size / 2, centerX - size - gap, centerY + size / 2, centerX - gap, centerY);
-      triangle(centerX, centerY - size / 2, centerX, centerY + size / 2, centerX + size, centerY);
-    }
-
-    if (i == 9) {
-      triangle(centerX - size, centerY - size / 2, centerX - size, centerY + size / 2, centerX, centerY);
-      rect(centerX, centerY - size / 2, size / 3, size);
-    }
-  }
-
-  float barY = buttonY + buttonHeight + 20;
-  float barHeight = 40;
-
-  stroke(0);
-  strokeWeight(2);
-  fill(155);
-  rect(0, barY, appWidth, barHeight);
-
-  if (song.length() > 0) {
-    float progress = map(song.position(), 0, song.length(), 0, appWidth);
-    fill(0);
-    noStroke();
-    rect(0, barY, progress, barHeight);
-  }
-
-  float smallW = appWidth * 0.1;
-  float smallH = 20;
-  float smallY = barY + barHeight + 10;
-  float rightX = appWidth - smallW - 10;
-  float leftX = rightX - smallW;
-
-  fill(200);
-  stroke(0);
-  rect(leftX, smallY, smallW, smallH);
-  rect(rightX, smallY, smallW, smallH);
-
-  fill(0);
-  textAlign(CENTER, CENTER);
-  textSize(24);
-
-  int currentMillis = song.position();
-  int currentSeconds = currentMillis / 1000;
-  int currentMinutes = currentSeconds / 60;
-  currentSeconds = currentSeconds % 60;
-
-  int totalMillis = song.length();
-  int totalSeconds = totalMillis / 1000;
-  int totalMinutes = totalSeconds / 60;
-  totalSeconds = totalSeconds % 60;
-
-  String currentTime = nf(currentMinutes, 1) + ":" + nf(currentSeconds, 2);
-  String totalTime = nf(totalMinutes, 1) + ":" + nf(totalSeconds, 2);
-
-  text(currentTime, leftX + smallW / 2, smallY + smallH / 2);
-  text(totalTime, rightX + smallW / 2, smallY + smallH / 2);
-
-  // Quit Button with red X
-  float quitSize = 40;
-  float quitX = appWidth - quitSize - 10;
-  float quitY = 10;
-  stroke(0);
-  strokeWeight(2);
-  noFill();
-  rect(quitX, quitY, quitSize, quitSize, 5);
-
-  pushMatrix();
-  translate(quitX + quitSize / 2, quitY + quitSize / 2);
-  rotate(radians(45));
-  stroke(255, 0, 0); // Red color
-  strokeWeight(3);
-  line(-10, 0, 10, 0);
-  line(0, -10, 0, 10);
-  popMatrix();
-}
-
+} //End draw
+//
 void mousePressed() {
-  int appWidth = displayWidth;
-  int appHeight = displayHeight;
-  float buttonWidth = appWidth / 12;
-  float buttonHeight = buttonWidth;
-  float titleHeight = 60;
-  float topMargin = 20;
-  float albumY = topMargin + titleHeight + 20;
-  float albumHeight = appHeight * 1/3;
-  float buttonY = albumY + albumHeight + 20;
-
-  for (int i = 0; i < 12; i++) {
-    float buttonX = buttonWidth * i;
-    if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
-      if (i == 2) prevSong();
-      if (i == 4) song.cue(max(0, song.position() - 5000));
-      if (i == 5) {
-        if (!isPlaying) {
-          song.play();
-          isPlaying = true;
-        } else {
-          song.pause();
-          isPlaying = false;
-        }
-      }
-      if (i == 6) {
-        song.pause();
-        song.rewind();
-        isPlaying = false;
-      }
-      if (i == 7) song.cue(min(song.length(), song.position() + 5000));
-      if (i == 9) nextSong();
-    }
-  }
-
-  float quitSize = 40;
-  float quitX = appWidth - quitSize - 10;
-  float quitY = 10;
-  if (mouseX > quitX && mouseX < quitX + quitSize && mouseY > quitY && mouseY < quitY + quitSize) {
-    exit();
-  }
-}
-
-void loadCurrentSong() {
-  if (song != null) {
-    song.close();
-  }
-  song = minim.loadFile(audioPaths[currentSongIndex]);
-  albumImg = loadImage(imagePaths[currentSongIndex]);
-  song.rewind();
-  isPlaying = false;
-}
-
-void nextSong() {
-  currentSongIndex = (currentSongIndex + 1) % titles.length;
-  loadCurrentSong();
-}
-
-void prevSong() {
-  currentSongIndex = (currentSongIndex - 1 + titles.length) % titles.length;
-  loadCurrentSong();
-}
-
-void stop() {
-  song.close();
-  minim.stop();
-  super.stop();
-}
+} //End mousePressed
+//
+void keyPressed() {
+} //End keyPressed
+//
+// End Main Program
