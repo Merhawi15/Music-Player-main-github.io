@@ -11,6 +11,8 @@ PImage albumImg;
 PFont mvBoliFont;
 
 boolean isPlaying = false;
+boolean isShuffle = false;
+boolean isRepeat = false;
 
 String[] titles = {
   "YEET music by Merhawi Haile",
@@ -47,6 +49,23 @@ float buttonWidth, buttonHeight, buttonY;
 float barY, barHeight;
 float quitSize, quitX, quitY;
 
+// Volume
+float volume = 0.7;  // between 0 and 1
+float volumeBarX, volumeBarY, volumeBarW, volumeBarH;
+
+// Button indices (no more magic numbers)
+final int BTN_PREV    = 2;
+final int BTN_REWIND  = 4;
+final int BTN_PLAY    = 5;
+final int BTN_STOP    = 6;
+final int BTN_FFWD    = 7;
+final int BTN_NEXT    = 9;
+final int BTN_SHUFFLE = 10;
+final int BTN_REPEAT  = 11;
+
+// For progress bar click
+boolean isSeeking = false;
+
 void setup() {
   fullScreen();
   appWidth = (float) displayWidth;
@@ -72,6 +91,12 @@ void setup() {
   quitX = appWidth - quitSize - 10.0f;
   quitY = 10.0f;
 
+  // Volume bar under player controls
+  volumeBarW = appWidth * 0.2f;
+  volumeBarH = 16.0f;
+  volumeBarX = (appWidth - volumeBarW) / 2.0f;
+  volumeBarY = barY + barHeight + 50.0f;
+
   loadCurrentSong();
 }
 
@@ -84,6 +109,17 @@ void draw() {
   drawProgressBar();
   drawTimeLabels();
   drawQuitButton();
+  drawVolumeSlider();
+
+  // Auto-next and repeat logic
+  if (song != null && !song.isPlaying() && isPlaying) {
+    if (isRepeat) {
+      song.rewind();
+      song.play();
+    } else {
+      autoNextSong();
+    }
+  }
 }
 
 void drawTitleBar() {
@@ -124,7 +160,7 @@ void drawButtons() {
     } else {
       fill(180);
     }
-    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+    rect(buttonX, buttonY, buttonWidth, buttonHeight, 8);
   }
 
   fill(0);
@@ -135,19 +171,19 @@ void drawButtons() {
     float size = buttonWidth / 3.0f;
     float gap = 5.0f;
 
-    if (i == 2) {
+    if (i == BTN_PREV) {
       // Previous button (left arrow)
       rect(centerX - size / 2.0f, centerY - size / 2.0f, size / 5.0f, size);
       triangle(centerX - size / 2.0f + size / 5.0f, centerY,
                centerX + size / 2.0f, centerY - size / 2.0f,
                centerX + size / 2.0f, centerY + size / 2.0f);
     }
-    if (i == 4) {
+    if (i == BTN_REWIND) {
       // Rewind 5 seconds
       triangle(centerX + size + gap, centerY - size / 2.0f, centerX + size + gap, centerY + size / 2.0f, centerX + gap, centerY);
       triangle(centerX, centerY - size / 2.0f, centerX, centerY + size / 2.0f, centerX - size, centerY);
     }
-    if (i == 5) {
+    if (i == BTN_PLAY) {
       // Play / Pause
       if (isPlaying) {
         float barWidth = size / 4.0f;
@@ -157,19 +193,53 @@ void drawButtons() {
         triangle(centerX - size / 2.0f, centerY - size / 2.0f, centerX - size / 2.0f, centerY + size / 2.0f, centerX + size / 2.0f, centerY);
       }
     }
-    if (i == 6) {
+    if (i == BTN_STOP) {
       // Stop
       rect(centerX - size / 2.0f, centerY - size / 2.0f, size, size);
     }
-    if (i == 7) {
+    if (i == BTN_FFWD) {
       // Forward 5 seconds
       triangle(centerX - size - gap, centerY - size / 2.0f, centerX - size - gap, centerY + size / 2.0f, centerX - gap, centerY);
       triangle(centerX, centerY - size / 2.0f, centerX, centerY + size / 2.0f, centerX + size, centerY);
     }
-    if (i == 9) {
+    if (i == BTN_NEXT) {
       // Next button (right arrow)
       triangle(centerX - size, centerY - size / 2.0f, centerX - size, centerY + size / 2.0f, centerX, centerY);
       rect(centerX, centerY - size / 2.0f, size / 3.0f, size);
+    }
+    if (i == BTN_SHUFFLE) {
+      // Shuffle (draw two crossing arrows)
+      stroke(0, isShuffle ? 180 : 80, 0);
+      strokeWeight(3);
+      noFill();
+      beginShape();
+      vertex(centerX - size/2, centerY + size/2);
+      vertex(centerX + size/2, centerY - size/2);
+      endShape();
+      beginShape();
+      vertex(centerX - size/2, centerY - size/2);
+      vertex(centerX + size/2, centerY + size/2);
+      endShape();
+      // Arrow heads
+      triangle(centerX + size/2-5, centerY - size/2-3, centerX + size/2+5, centerY - size/2, centerX + size/2-5, centerY - size/2+3);
+      triangle(centerX + size/2-5, centerY + size/2-3, centerX + size/2+5, centerY + size/2, centerX + size/2-5, centerY + size/2+3);
+      stroke(0);
+      fill(0);
+    }
+    if (i == BTN_REPEAT) {
+      // Repeat (draw a circle arrow)
+      stroke(0, 0, isRepeat ? 180 : 80);
+      strokeWeight(3);
+      noFill();
+      arc(centerX, centerY, size, size, PI/3, TWO_PI-PI/3);
+      // Arrow head
+      float a = PI/3;
+      float r = size/2;
+      float ax = centerX + cos(a)*r;
+      float ay = centerY + sin(a)*r;
+      triangle(ax, ay, ax-8, ay-5, ax-8, ay+5);
+      stroke(0);
+      fill(0);
     }
   }
 }
@@ -182,11 +252,12 @@ void drawProgressBar() {
 
   if (song != null && song.length() > 0) {
     float progress = map(song.position(), 0, song.length(), 0, appWidth);
-    fill(0);
+    fill(0);  // Black color for progress
     noStroke();
     rect(0, barY, progress, barHeight);
   }
 }
+
 
 void drawTimeLabels() {
   float smallW = appWidth * 0.1f;
@@ -221,6 +292,29 @@ void drawTimeLabels() {
   text(totalTime, rightX + smallW / 2.0f, smallY + smallH / 2.0f);
 }
 
+void drawVolumeSlider() {
+  // Background bar
+  fill(220);
+  stroke(0);
+  rect(volumeBarX, volumeBarY, volumeBarW, volumeBarH, 8);
+
+  // Fill bar
+  fill(60, 180, 60);
+  noStroke();
+  rect(volumeBarX, volumeBarY, volumeBarW * volume, volumeBarH, 8);
+
+  // Handle
+  float handleX = volumeBarX + volumeBarW * volume;
+  fill(0);
+  ellipse(handleX, volumeBarY + volumeBarH / 2, volumeBarH + 5, volumeBarH + 5);
+
+  // Label
+  fill(0);
+  textAlign(CENTER, CENTER);
+  textSize(16);
+  text("Volume", volumeBarX + volumeBarW / 2, volumeBarY - 12);
+}
+
 void drawQuitButton() {
   boolean hover = (mouseX > quitX && mouseX < quitX + quitSize && mouseY > quitY && mouseY < quitY + quitSize);
   stroke(0);
@@ -240,17 +334,38 @@ void drawQuitButton() {
 }
 
 void mousePressed() {
+  // Progress bar seek
+  if (mouseY > barY && mouseY < barY + barHeight) {
+    float clickRatio = constrain(mouseX / appWidth, 0, 1);
+    if (song != null) {
+      int newPos = int(song.length() * clickRatio);
+      song.cue(newPos);
+    }
+    return;
+  }
+
+  // Volume bar
+  if (mouseY > volumeBarY && mouseY < volumeBarY + volumeBarH &&
+      mouseX > volumeBarX && mouseX < volumeBarX + volumeBarW) {
+    volume = constrain((mouseX - volumeBarX) / volumeBarW, 0, 1);
+    if (song != null) song.setGain(map(volume, 0, 1, -80, 0));
+    return;
+  }
+
+  // Control buttons
   for (int i = 0; i < 12; i++) {
     float buttonX = buttonWidth * i;
     if (mouseX > buttonX && mouseX < buttonX + buttonWidth &&
         mouseY > buttonY && mouseY < buttonY + buttonHeight) {
       switch(i) {
-        case 2: prevSong(); break;
-        case 4: rewindFive(); break;
-        case 5: togglePlayPause(); break;
-        case 6: stopSong(); break;
-        case 7: forwardFive(); break;
-        case 9: nextSong(); break;
+        case BTN_PREV:    prevSong(); break;
+        case BTN_REWIND:  rewindFive(); break;
+        case BTN_PLAY:    togglePlayPause(); break;
+        case BTN_STOP:    stopSong(); break;
+        case BTN_FFWD:    forwardFive(); break;
+        case BTN_NEXT:    nextSong(); break;
+        case BTN_SHUFFLE: isShuffle = !isShuffle; break;
+        case BTN_REPEAT:  isRepeat = !isRepeat; break;
       }
     }
   }
@@ -262,6 +377,19 @@ void mousePressed() {
   }
 }
 
+void keyPressed() {
+  if (key == ' ' || key == 'k') togglePlayPause();
+  else if (keyCode == RIGHT) nextSong();
+  else if (keyCode == LEFT) prevSong();
+  else if (keyCode == UP) setVolume(volume + 0.05f);
+  else if (keyCode == DOWN) setVolume(volume - 0.05f);
+}
+
+void setVolume(float v) {
+  volume = constrain(v, 0, 1);
+  if (song != null) song.setGain(map(volume, 0, 1, -80, 0));
+}
+
 void loadCurrentSong() {
   if (song != null) {
     song.close();
@@ -269,6 +397,7 @@ void loadCurrentSong() {
   song = minim.loadFile(audioPaths[currentSongIndex]);
   albumImg = loadImage(imagePaths[currentSongIndex]);
   isPlaying = false;
+  setVolume(volume);
 }
 
 void togglePlayPause() {
@@ -290,14 +419,30 @@ void stopSong() {
 }
 
 void nextSong() {
-  currentSongIndex++;
-  if (currentSongIndex >= titles.length) currentSongIndex = 0;
+  if (isShuffle) {
+    int prevIdx = currentSongIndex;
+    while (titles.length > 1) {
+      currentSongIndex = int(random(titles.length));
+      if (currentSongIndex != prevIdx) break;
+    }
+  } else {
+    currentSongIndex++;
+    if (currentSongIndex >= titles.length) currentSongIndex = 0;
+  }
   loadCurrentSong();
 }
 
 void prevSong() {
-  currentSongIndex--;
-  if (currentSongIndex < 0) currentSongIndex = titles.length - 1;
+  if (isShuffle) {
+    int prevIdx = currentSongIndex;
+    while (titles.length > 1) {
+      currentSongIndex = int(random(titles.length));
+      if (currentSongIndex != prevIdx) break;
+    }
+  } else {
+    currentSongIndex--;
+    if (currentSongIndex < 0) currentSongIndex = titles.length - 1;
+  }
   loadCurrentSong();
 }
 
@@ -311,6 +456,23 @@ void forwardFive() {
   if (song == null) return;
   int newPos = min(song.length(), song.position() + 5000);
   song.cue(newPos);
+}
+
+// Auto-next for end-of-song
+void autoNextSong() {
+  if (isShuffle) {
+    int prevIdx = currentSongIndex;
+    while (titles.length > 1) {
+      currentSongIndex = int(random(titles.length));
+      if (currentSongIndex != prevIdx) break;
+    }
+  } else {
+    currentSongIndex++;
+    if (currentSongIndex >= titles.length) currentSongIndex = 0;
+  }
+  loadCurrentSong();
+  song.play();
+  isPlaying = true;
 }
 
 void stop() {
