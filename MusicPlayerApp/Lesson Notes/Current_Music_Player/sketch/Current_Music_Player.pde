@@ -51,7 +51,6 @@ float quitSize, quitX, quitY;
 
 // Volume
 float volume = 0.7;  // between 0 and 1
-float volumeBarX, volumeBarY, volumeBarW, volumeBarH;
 
 // Button indices (no more magic numbers)
 final int BTN_PREV    = 2;
@@ -91,12 +90,6 @@ void setup() {
   quitX = appWidth - quitSize - 10.0f;
   quitY = 10.0f;
 
-  // Volume bar under player controls
-  volumeBarW = appWidth * 0.2f;
-  volumeBarH = 16.0f;
-  volumeBarX = (appWidth - volumeBarW) / 2.0f;
-  volumeBarY = barY + barHeight + 50.0f;
-
   loadCurrentSong();
 }
 
@@ -109,7 +102,6 @@ void draw() {
   drawProgressBar();
   drawTimeLabels();
   drawQuitButton();
-  drawVolumeSlider();
 
   // Auto-next and repeat logic
   if (song != null && !song.isPlaying() && isPlaying) {
@@ -292,29 +284,6 @@ void drawTimeLabels() {
   text(totalTime, rightX + smallW / 2.0f, smallY + smallH / 2.0f);
 }
 
-void drawVolumeSlider() {
-  // Background bar
-  fill(220);
-  stroke(0);
-  rect(volumeBarX, volumeBarY, volumeBarW, volumeBarH, 8);
-
-  // Fill bar
-  fill(60, 180, 60);
-  noStroke();
-  rect(volumeBarX, volumeBarY, volumeBarW * volume, volumeBarH, 8);
-
-  // Handle
-  float handleX = volumeBarX + volumeBarW * volume;
-  fill(0);
-  ellipse(handleX, volumeBarY + volumeBarH / 2, volumeBarH + 5, volumeBarH + 5);
-
-  // Label
-  fill(0);
-  textAlign(CENTER, CENTER);
-  textSize(16);
-  text("Volume", volumeBarX + volumeBarW / 2, volumeBarY - 12);
-}
-
 void drawQuitButton() {
   boolean hover = (mouseX > quitX && mouseX < quitX + quitSize && mouseY > quitY && mouseY < quitY + quitSize);
   stroke(0);
@@ -341,14 +310,6 @@ void mousePressed() {
       int newPos = int(song.length() * clickRatio);
       song.cue(newPos);
     }
-    return;
-  }
-
-  // Volume bar
-  if (mouseY > volumeBarY && mouseY < volumeBarY + volumeBarH &&
-      mouseX > volumeBarX && mouseX < volumeBarX + volumeBarW) {
-    volume = constrain((mouseX - volumeBarX) / volumeBarW, 0, 1);
-    if (song != null) song.setGain(map(volume, 0, 1, -80, 0));
     return;
   }
 
