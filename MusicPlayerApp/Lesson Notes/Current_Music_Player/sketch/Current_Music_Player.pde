@@ -396,7 +396,7 @@ void drawPlaylistPopup() {
   fill(0);                             // Black text
   textAlign(CENTER, CENTER);           // Centered text
   textSize(28);                        // Big title
-  text("Select a song", popupX + popupWidth / 2, popupY + 30); // Title above song list
+  text("Select a song:", popupX + popupWidth / 2, popupY + 30); // Title above song list
 
   for (int i = 0; i < titles.length; i++) { // For each song title
     float y = popupY + 60 + i * 50;   // Y position for each song
