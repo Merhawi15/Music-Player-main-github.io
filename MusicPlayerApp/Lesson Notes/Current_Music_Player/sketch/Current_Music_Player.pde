@@ -113,8 +113,8 @@ void setup() {
   barHeight = 40.0f;                   // Height of progress bar
 
   quitSize = 40.0f;                    // Size for the quit button (square)
-  quitX = appWidth - quitSize - 10.0f; // X position for quit button
-  quitY = 10.0f;                       // Y position for quit button
+  quitX = appWidth - quitSize;         // X position for quit button (flush right, no margin)
+  quitY = 0;                           // Y position for quit button (flush top, no margin)
 
   loadCurrentSong();                   // Loads the first song and image
 }
