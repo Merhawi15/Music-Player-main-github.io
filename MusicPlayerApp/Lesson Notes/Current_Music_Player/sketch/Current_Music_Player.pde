@@ -75,15 +75,16 @@ float quitSize, quitX, quitY;          // Quit button size and position
 float volume = 0.7;                    // Volume level (0 to 1)
 
 // Button indices (updated for new layout)
+// SWAPPED: "Previous" and "Volume Up" button positions
 final int BTN_VOL_DOWN = 1;            // Volume Down button index
-final int BTN_VOL_UP   = 3;            // Swapped: now index 3
-final int BTN_PREV     = 2;            // Swapped: now index 2
+final int BTN_VOL_UP   = 2;            // Volume Up button index (was 3, now 2)
+final int BTN_PREV     = 3;            // Previous button index (was 2, now 3)
 final int BTN_REWIND   = 4;            // Rewind button index
 final int BTN_PLAY     = 5;            // Play/Pause button index
 final int BTN_STOP     = 6;            // Stop button index
 final int BTN_FFWD     = 7;            // Fast Forward button index
-final int BTN_NEXT     = 8;            // Swapped: now index 8
-final int BTN_PLAYLIST = 9;            // Swapped: now index 9
+final int BTN_NEXT     = 8;            // Next button index
+final int BTN_PLAYLIST = 9;            // Playlist button index
 final int BTN_SHUFFLE  = 10;           // Shuffle button index
 final int BTN_REPEAT   = 11;           // Repeat button index
 
