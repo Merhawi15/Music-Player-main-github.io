@@ -89,7 +89,6 @@ final int BTN_SHUFFLE  = 10;           // Shuffle button index
 final int BTN_REPEAT   = 11;           // Repeat button index
 
 boolean isSeeking = false;             // True if user is moving the progress bar
-
 boolean showPlaylist = false;          // True if playlist popup is shown
 
 void setup() {
@@ -149,7 +148,7 @@ void drawTitleBar() {
   fill(220);                           // Light gray background
   stroke(0);                           // Black border
   strokeWeight(2);                     // Border thickness
-  rect(albumX, topMargin, albumWidth, titleHeight); // Draw rectangle
+  rect(albumX, topMargin, albumWidth, titleHeight); // Draw rectangle (square)
 
   fill(titleColors[currentSongIndex]); // Different color for each song
   textFont(mvBoliFont);                // Use custom font
@@ -163,7 +162,7 @@ void drawAlbumImage() {
     image(albumImg, albumX, albumY, albumWidth, albumHeight); // Show the image
   } else {                             // If the image is missing
     fill(200);                         // Gray background
-    rect(albumX, albumY, albumWidth, albumHeight); // Draw rectangle
+    rect(albumX, albumY, albumWidth, albumHeight); // Draw rectangle (square)
     fill(0);                           // Black text
     textAlign(CENTER, CENTER);         // Centered text
     textSize(32);                      // Big text
@@ -176,16 +175,11 @@ void drawButtons() {
   stroke(0);                           // Black border for buttons
   strokeWeight(1);                     // Thin border
 
-  // Draw button backgrounds
+  // Draw button backgrounds, no hover, all square (no rounded corners)
   for (int i = 0; i < 12; i++) {       // 12 buttons in total
     float buttonX = buttonWidth * i;   // X position of current button
-    if (mouseX > buttonX && mouseX < buttonX + buttonWidth &&
-        mouseY > buttonY && mouseY < buttonY + buttonHeight) {
-      fill(150);                       // Darker when mouse is over
-    } else {
-      fill(180);                       // Normal button color
-    }
-    rect(buttonX, buttonY, buttonWidth, buttonHeight, 8); // Draw button
+    fill(180);                         // Always normal button color, no hover
+    rect(buttonX, buttonY, buttonWidth, buttonHeight); // Draw square button
   }
 
   fill(0);                             // Black for icons
@@ -229,16 +223,16 @@ void drawButtons() {
     if (i == BTN_VOL_DOWN) {           // Volume Down: minus sign
       float lineW = size * 0.8f;
       float lineH = size * 0.15f;
-      rect(centerX - lineW/2, centerY - lineH/2, lineW, lineH, 3);
+      rect(centerX - lineW/2, centerY - lineH/2, lineW, lineH); // Square
     }
     if (i == BTN_VOL_UP) {             // Volume Up: plus sign (SWAPPED position)
       float lineW = size * 0.8f;
       float lineH = size * 0.15f;
-      rect(centerX - lineW/2, centerY - lineH/2, lineW, lineH, 3);
-      rect(centerX - lineH/2, centerY - lineW/2, lineH, lineW, 3);
+      rect(centerX - lineW/2, centerY - lineH/2, lineW, lineH); // Square
+      rect(centerX - lineH/2, centerY - lineW/2, lineH, lineW); // Square
     }
     if (i == BTN_PREV) {               // Previous song button (SWAPPED position)
-      rect(centerX - size / 2.0f, centerY - size / 2.0f, size / 5.0f, size);
+      rect(centerX - size / 2.0f, centerY - size / 2.0f, size / 5.0f, size); // Square
       triangle(centerX - size / 2.0f + size / 5.0f, centerY,
                centerX + size / 2.0f, centerY - size / 2.0f,
                centerX + size / 2.0f, centerY + size / 2.0f);
@@ -250,14 +244,14 @@ void drawButtons() {
     if (i == BTN_PLAY) {               // Play/Pause button
       if (isPlaying) {                 // If music is playing, show pause icon
         float barWidth = size / 4.0f;
-        rect(centerX - barWidth - 2.0f, centerY - size / 2.0f, barWidth, size);
-        rect(centerX + 2.0f, centerY - size / 2.0f, barWidth, size);
+        rect(centerX - barWidth - 2.0f, centerY - size / 2.0f, barWidth, size); // Square
+        rect(centerX + 2.0f, centerY - size / 2.0f, barWidth, size); // Square
       } else {                         // If not playing, show play icon
         triangle(centerX - size / 2.0f, centerY - size / 2.0f, centerX - size / 2.0f, centerY + size / 2.0f, centerX + size / 2.0f, centerY);
       }
     }
     if (i == BTN_STOP) {               // Stop button: square
-      rect(centerX - size / 2.0f, centerY - size / 2.0f, size, size);
+      rect(centerX - size / 2.0f, centerY - size / 2.0f, size, size); // Square
     }
     if (i == BTN_FFWD) {               // Fast Forward button
       triangle(centerX - size - gap, centerY - size / 2.0f, centerX - size - gap, centerY + size / 2.0f, centerX - gap, centerY);
@@ -265,12 +259,12 @@ void drawButtons() {
     }
     if (i == BTN_NEXT) {               // Next song button (SWAPPED position)
       triangle(centerX - size, centerY - size / 2.0f, centerX - size, centerY + size / 2.0f, centerX, centerY);
-      rect(centerX, centerY - size / 2.0f, size / 3.0f, size);
+      rect(centerX, centerY - size / 2.0f, size / 3.0f, size); // Square
     }
     if (i == BTN_PLAYLIST) {           // Playlist button (SWAPPED position)
       float lineHeight = size / 5.0f;
       for (int l = -1; l <= 1; l++) {
-        rect(centerX - size/2, centerY + l*lineHeight, size, lineHeight/2, 2);
+        rect(centerX - size/2, centerY + l*lineHeight, size, lineHeight/2); // Square
       }
     }
     if (i == BTN_SHUFFLE) {            // Shuffle button: arrows crossing
@@ -311,13 +305,13 @@ void drawProgressBar() {
   stroke(0);                           // Black border
   strokeWeight(2);                     // Thickness
   fill(155);                           // Gray background
-  rect(0, barY, appWidth, barHeight);  // Draws the progress bar
+  rect(0, barY, appWidth, barHeight);  // Draws the progress bar (square)
 
   if (song != null && song.length() > 0) { // If a song is loaded
     float progress = map(song.position(), 0, song.length(), 0, appWidth); // Progress bar width
     fill(0);                           // Black fill for progress
     noStroke();
-    rect(0, barY, progress, barHeight); // Draws filled part
+    rect(0, barY, progress, barHeight); // Draws filled part (square)
   }
 }
 
@@ -331,8 +325,8 @@ void drawTimeLabels() {
 
   fill(200);                           // Gray background
   stroke(0);                           // Black border
-  rect(leftX, smallY, smallW, smallH); // Current time box
-  rect(rightX, smallY, smallW, smallH);// Total time box
+  rect(leftX, smallY, smallW, smallH); // Current time box (square)
+  rect(rightX, smallY, smallW, smallH);// Total time box (square)
 
   fill(0);                             // Black text
   textAlign(CENTER, CENTER);           // Centered text
@@ -366,12 +360,11 @@ void drawVolumeLabel() {
 
 // Draws the quit (close) button in upper right
 void drawQuitButton() {
-  boolean hover = (mouseX > quitX && mouseX < quitX + quitSize && mouseY > quitY && mouseY < quitY + quitSize); // Check mouse hover
+  // No hover effect, always transparent, and square (no rounded corners)
   stroke(0);                           // Black border
   strokeWeight(2);                     // Thickness
-  if (hover) fill(255, 220, 220);      // Light red if hovered
-  else noFill();                       // Transparent if not hovered
-  rect(quitX, quitY, quitSize, quitSize, 5); // Draws rectangle
+  noFill();                            // Always transparent
+  rect(quitX, quitY, quitSize, quitSize); // Draw square, no rounding
 
   pushMatrix();                        // Save drawing state
   translate(quitX + quitSize / 2.0f, quitY + quitSize / 2.0f); // Move to center of button
@@ -392,7 +385,7 @@ void drawPlaylistPopup() {
 
   fill(245);                           // Very light gray background
   stroke(0);                           // Black border
-  rect(popupX, popupY, popupWidth, popupHeight, 12); // Draw popup
+  rect(popupX, popupY, popupWidth, popupHeight, 12); // Draw popup, keep rounded
 
   fill(0);                             // Black text
   textAlign(CENTER, CENTER);           // Centered text
@@ -404,7 +397,7 @@ void drawPlaylistPopup() {
     if (mouseX > popupX && mouseX < popupX + popupWidth &&
         mouseY > y - 20 && mouseY < y + 20) {
       fill(220, 240, 255);            // Highlight if mouse is over
-      rect(popupX + 10, y - 20, popupWidth - 20, 40, 6); // Draw highlight box
+      rect(popupX + 10, y - 20, popupWidth - 20, 40, 6); // Draw highlight box (rounded)
       fill(0);                        // Black text
     }
     textSize(24);                     // Slightly smaller text
